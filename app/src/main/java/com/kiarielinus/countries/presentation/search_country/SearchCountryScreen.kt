@@ -5,17 +5,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Brightness1
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.Alignment.Companion.TopEnd
+import androidx.compose.ui.Alignment.Companion.TopStart
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,7 +26,11 @@ fun SearchCountryScreen() {
     Column(modifier = Modifier.padding(24.dp)) {
         SearchPane()
         Spacer(modifier = Modifier.height(16.dp))
-
+        ConfigPane(
+            language = "EN",
+            onLangChange = { /*TODO*/ },
+            onFilterChange = {}
+        )
     }
 }
 
@@ -90,7 +91,8 @@ fun SearchPane() {
                         fontSize = 16.sp,
                         fontFamily = Axiforma,
                         fontWeight = FontWeight.W300,
-                        letterSpacing = 0.3.sp,
+                        letterSpacing = (-0.3).sp,
+                        lineHeight = 24.67.sp,
                         color = Gray500
                     )
                 }
@@ -102,38 +104,66 @@ fun SearchPane() {
 }
 
 @Composable
+fun ConfigPane(
+    language: String,
+    onLangChange: () -> Unit,
+    onFilterChange: () -> Unit
+) {
+    Row(modifier = Modifier.fillMaxWidth(),
+    horizontalArrangement = Arrangement.SpaceBetween){
+        ConfigButton(
+            text = language,
+            imgVector = Icons.Outlined.Language
+        ) {onLangChange()}
+        ConfigButton(
+            text = "Filter",
+            imgVector = Icons.Outlined.FilterAlt
+        ) {onFilterChange()}
+    }
+}
+
+@Composable
 fun ConfigButton(
     text: String,
-    imgVector: ImageVector
+    imgVector: ImageVector,
+    onClick: () -> Unit
 ) {
     Button(
-        onClick = { /*TODO*/ },
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+        onClick = { onClick() },
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color(0xFFFFFFFF),
+            contentColor = Color(0xFF000000)
+        )
     ) {
         Icon(imageVector = imgVector, contentDescription = "Configuration Button Image")
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = text,
             fontFamily = Axiforma,
-            fontWeight = FontWeight.W300,
-            lineHeight = 24.67.sp,
+            fontWeight = FontWeight.W500,
+            lineHeight = 19.25.sp,
             letterSpacing = (-0.3).sp,
             textAlign = TextAlign.Center
             )
     }
 }
 
+@Composable
+fun CountryItem() {
+    
+}
 
 @Preview(
-//    showBackground = true
+    showBackground = true
 )
 @Composable
 fun SearchPanePrev() {
-    SearchPane()
+    SearchCountryScreen()
 }
 
-@Preview
-@Composable
-fun ConfigBtnPrev() {
-    ConfigButton(text = "EN", imgVector = Icons.Outlined.Language)
-}
+//@Preview
+//@Composable
+//fun ConfigBtnPrev() {
+//    ConfigButton(text = "Filter", imgVector = Icons.Outlined.FilterAlt){}
+//}
