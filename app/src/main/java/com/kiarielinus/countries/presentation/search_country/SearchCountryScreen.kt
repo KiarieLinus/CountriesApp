@@ -1,5 +1,7 @@
 package com.kiarielinus.countries.presentation.search_country
 
+import android.media.Image
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,24 +10,34 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Alignment.Companion.TopStart
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.kiarielinus.countries.ui.theme.*
 
 @Composable
 fun SearchCountryScreen() {
-    Column(modifier = Modifier.padding(24.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 24.dp)
+            .padding(top = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         SearchPane()
-        Spacer(modifier = Modifier.height(16.dp))
         ConfigPane(
             language = "EN",
             onLangChange = { /*TODO*/ },
@@ -109,16 +121,18 @@ fun ConfigPane(
     onLangChange: () -> Unit,
     onFilterChange: () -> Unit
 ) {
-    Row(modifier = Modifier.fillMaxWidth(),
-    horizontalArrangement = Arrangement.SpaceBetween){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         ConfigButton(
             text = language,
             imgVector = Icons.Outlined.Language
-        ) {onLangChange()}
+        ) { onLangChange() }
         ConfigButton(
             text = "Filter",
             imgVector = Icons.Outlined.FilterAlt
-        ) {onFilterChange()}
+        ) { onFilterChange() }
     }
 }
 
@@ -145,13 +159,57 @@ fun ConfigButton(
             lineHeight = 19.25.sp,
             letterSpacing = (-0.3).sp,
             textAlign = TextAlign.Center
-            )
+        )
     }
 }
 
 @Composable
-fun CountryItem() {
-    
+fun CountryItem(
+    flagImageUrl: String,
+    countryName: String,
+    countryCapital: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = CenterVertically,
+        modifier = modifier.padding(vertical = 3.dp)
+    ) {
+        val painter = rememberAsyncImagePainter(model = flagImageUrl)
+        val state = painter.state
+        val painterOnFailure = rememberVectorPainter(image = Icons.Outlined.Flag)
+        Image(
+            painter = if (state is AsyncImagePainter.State.Success) painter else painterOnFailure,
+            contentDescription = countryName,
+            modifier = Modifier
+                .size(40.dp)
+                .background(shape = RoundedCornerShape(25), color = Gray500)
+                .clip(RoundedCornerShape(25))
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column {
+            Text(
+                text = countryName,
+                fontFamily = Axiforma,
+                fontSize = 14.sp,
+                lineHeight = 22.18.sp,
+                letterSpacing = (-0.3).sp,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.W400,
+                color = Gray900
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = countryCapital,
+                fontFamily = Axiforma,
+                fontSize = 14.sp,
+                lineHeight = 22.18.sp,
+                letterSpacing = (-0.3).sp,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.W400,
+                color = Gray500
+            )
+        }
+    }
 }
 
 @Preview(
@@ -162,6 +220,17 @@ fun SearchPanePrev() {
     SearchCountryScreen()
 }
 
+@Preview(
+    showBackground = true
+)
+@Composable
+fun CountryItemPrev() {
+    CountryItem(
+        flagImageUrl = "https://flagcdn.com/ke.svg",
+        countryName = "Kenya",
+        countryCapital = "Nairobi"
+    )
+}
 //@Preview
 //@Composable
 //fun ConfigBtnPrev() {
