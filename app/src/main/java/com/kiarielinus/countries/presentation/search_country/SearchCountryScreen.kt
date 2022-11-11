@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
@@ -21,12 +22,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import com.kiarielinus.countries.domain.model.CountryInfo
 import com.kiarielinus.countries.presentation.ui.theme.*
 
 @Composable
-fun SearchCountryScreen() {
+fun SearchCountryScreen(
+    viewModel: SearchCountryViewModel = hiltViewModel()
+) {
+
+    val state = viewModel.searchState.value
+
     Column(
         modifier = Modifier
             .padding(horizontal = 24.dp)
@@ -39,6 +47,29 @@ fun SearchCountryScreen() {
             onLangChange = { /*TODO*/ },
             onFilterChange = {}
         )
+
+        val countries = state.countries
+        val testCountries = countries.take(5)
+
+        if(state.isLoading){
+            CircularProgressIndicator()
+        }
+
+        if (!state.isLoading && state.error.isBlank()) {
+            LazyColumn (modifier = Modifier.fillMaxWidth()){
+                items(testCountries) { item: CountryInfo ->
+                    CountryItem(
+                        flagImageUrl = item.flagUrl,
+                        countryName = item.name,
+                        countryCapital = item.capital,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
+        } else {
+            Text(text = state.error, color = Gray900)
+        }
     }
 }
 
@@ -159,14 +190,14 @@ fun ConfigButton(
     }
 }
 
-@Composable
-fun CountryList(
-
-) {
-    LazyColumn{
-
-    }
-}
+//@Composable
+//fun CountryList(
+//
+//) {
+//    LazyColumn{
+//
+//    }
+//}
 
 @Composable
 fun CountryItem(
@@ -221,7 +252,7 @@ fun CountryItem(
 )
 @Composable
 fun SearchPanePrev() {
-    SearchCountryScreen()
+    SearchPane()
 }
 
 @Preview(
@@ -235,8 +266,9 @@ fun CountryItemPrev() {
         countryCapital = "Nairobi"
     )
 }
-//@Preview
-//@Composable
-//fun ConfigBtnPrev() {
-//    ConfigButton(text = "Filter", imgVector = Icons.Outlined.FilterAlt){}
-//}
+
+@Preview
+@Composable
+fun ConfigBtnPrev() {
+    ConfigButton(text = "Filter", imgVector = Icons.Outlined.FilterAlt) {}
+}

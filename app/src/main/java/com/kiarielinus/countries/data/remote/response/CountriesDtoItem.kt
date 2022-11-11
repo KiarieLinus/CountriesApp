@@ -91,7 +91,10 @@ data class CountriesDtoItem(
             timezone = timezones,
             startOfWeek = startOfWeek,
             drivingSide = car.side,
-            independent = independent
+            independent = independent,
+            flagUrl = flags.svg,
+            coatOfArmsUrl = coatOfArms.svg,
+            mapUrl = maps.openStreetMaps
         )
     }
 }

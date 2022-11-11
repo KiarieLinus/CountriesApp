@@ -14,5 +14,8 @@ data class CountryInfo(
     val startOfWeek: String,
     val drivingSide: String,
     val independent: Boolean,
-    val continent: List<String>
+    val continent: List<String>,
+    val flagUrl: String,
+    val coatOfArmsUrl: String,
+    val mapUrl: String
 )
