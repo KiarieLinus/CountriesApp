@@ -2,6 +2,7 @@ package com.kiarielinus.countries.data.remote.response
 
 
 import com.google.gson.annotations.SerializedName
+import com.kiarielinus.countries.domain.model.CountryInfo
 
 data class CountriesDtoItem(
     @SerializedName("altSpellings")
@@ -74,4 +75,23 @@ data class CountriesDtoItem(
     val translations: Translations,
     @SerializedName("unMember")
     val unMember: Boolean
-)
+){
+    fun toCountryInfo(): CountryInfo{
+        return CountryInfo(
+            name = name.common,
+            capital = capital.first(),
+            population = population,
+            continent = continents,
+            area = area,
+            demonyms = demonyms.eng.f,//English doesn't really have a grammatical gender
+            unMember = unMember,
+            diallingCode = "${idd.root}${idd.suffixes.first()}",
+            landlocked = landlocked,
+            countryDomain = tld,
+            timezone = timezones,
+            startOfWeek = startOfWeek,
+            drivingSide = car.side,
+            independent = independent
+        )
+    }
+}

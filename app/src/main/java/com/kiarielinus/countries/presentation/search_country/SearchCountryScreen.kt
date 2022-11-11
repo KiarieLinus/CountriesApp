@@ -1,23 +1,19 @@
 package com.kiarielinus.countries.presentation.search_country
 
-import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
-import androidx.compose.ui.Alignment.Companion.TopEnd
-import androidx.compose.ui.Alignment.Companion.TopStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
@@ -27,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
-import com.kiarielinus.countries.ui.theme.*
+import com.kiarielinus.countries.presentation.ui.theme.*
 
 @Composable
 fun SearchCountryScreen() {
@@ -164,6 +160,15 @@ fun ConfigButton(
 }
 
 @Composable
+fun CountryList(
+
+) {
+    LazyColumn{
+
+    }
+}
+
+@Composable
 fun CountryItem(
     flagImageUrl: String,
     countryName: String,
@@ -171,8 +176,7 @@ fun CountryItem(
     modifier: Modifier = Modifier
 ) {
     Row(
-        verticalAlignment = CenterVertically,
-        modifier = modifier.padding(vertical = 3.dp)
+        verticalAlignment = CenterVertically
     ) {
         val painter = rememberAsyncImagePainter(model = flagImageUrl)
         val state = painter.state
@@ -226,7 +230,7 @@ fun SearchPanePrev() {
 @Composable
 fun CountryItemPrev() {
     CountryItem(
-        flagImageUrl = "https://flagcdn.com/ke.svg",
+        flagImageUrl = "che.ck",
         countryName = "Kenya",
         countryCapital = "Nairobi"
     )

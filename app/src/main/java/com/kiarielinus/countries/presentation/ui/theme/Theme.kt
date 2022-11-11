@@ -1,4 +1,4 @@
-package com.kiarielinus.countries.ui.theme
+package com.kiarielinus.countries.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
