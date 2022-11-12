@@ -4,6 +4,7 @@
     package="com.kiarielinus.countries">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".CountriesApp"
@@ -19,7 +20,9 @@
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Countries">
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Countries"
+            android:usesCleartextTraffic="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

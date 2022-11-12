@@ -17,5 +17,7 @@ data class CountryInfo(
     val continent: List<String>,
     val flagUrl: String,
     val coatOfArmsUrl: String,
-    val mapUrl: String
+    val mapUrl: String,
+    val currencyName: String,
+    val currencySymbol: String
 )

@@ -30,7 +30,7 @@ data class CountriesDtoItem(
     @SerializedName("continents")
     val continents: List<String>,
     @SerializedName("currencies")
-    val currencies: Currencies,
+    val currencies: HashMap<String, CurrencyInfo>? = HashMap(),
     @SerializedName("demonyms")
     val demonyms: Demonyms,
     @SerializedName("fifa")
@@ -40,7 +40,7 @@ data class CountriesDtoItem(
     @SerializedName("flags")
     val flags: Flags,
     @SerializedName("gini")
-    val gini: Gini,
+    val gini: HashMap<String,Double> = HashMap(),
     @SerializedName("idd")
     val idd: Idd,
     @SerializedName("independent")
@@ -48,7 +48,7 @@ data class CountriesDtoItem(
     @SerializedName("landlocked")
     val landlocked: Boolean,
     @SerializedName("languages")
-    val languages: Languages,
+    val languages: HashMap<String,String>? = HashMap(),
     @SerializedName("latlng")
     val latlng: List<Double>,
     @SerializedName("maps")
@@ -72,7 +72,7 @@ data class CountriesDtoItem(
     @SerializedName("tld")
     val tld: List<String>,
     @SerializedName("translations")
-    val translations: Translations,
+    val translations: HashMap<String,TranslationInfo>? = HashMap(),
     @SerializedName("unMember")
     val unMember: Boolean
 ){
@@ -94,7 +94,9 @@ data class CountriesDtoItem(
             independent = independent,
             flagUrl = flags.svg,
             coatOfArmsUrl = coatOfArms.svg,
-            mapUrl = maps.openStreetMaps
+            mapUrl = maps.openStreetMaps,
+            currencyName = currencies?.values?.first()?.name ?: "",
+            currencySymbol = currencies?.values?.first()?.symbol ?: ""
         )
     }
 }
