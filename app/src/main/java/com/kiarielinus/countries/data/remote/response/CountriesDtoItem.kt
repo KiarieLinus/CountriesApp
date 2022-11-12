@@ -93,7 +93,7 @@ data class CountriesDtoItem(
             drivingSide = car.side,
             independent = independent,
             flagUrl = flags.png,
-            coatOfArmsUrl = coatOfArms?.svg,
+            coatOfArmsUrl = coatOfArms?.png,
             mapUrl = maps.openStreetMaps,
             currencyName = currencies?.values?.first()?.name ?: "",
             currencySymbol = currencies?.values?.first()?.symbol ?: ""

@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kiarielinus.countries.presentation.search_country.SearchCountryScreen
+import com.kiarielinus.countries.presentation.search_country.SearchCountryViewModel
 import com.kiarielinus.countries.presentation.ui.theme.CountriesTheme
 import dagger.hilt.android.AndroidEntryPoint
 

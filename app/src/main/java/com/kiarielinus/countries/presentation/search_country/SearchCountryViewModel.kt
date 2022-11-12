@@ -4,8 +4,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kiarielinus.countries.domain.model.CountryInfo
 import com.kiarielinus.countries.domain.repository.CountriesRepository
 import com.kiarielinus.countries.domain.use_cases.UseCases
+import com.kiarielinus.countries.presentation.country_details.DetailsState
 import com.kiarielinus.countries.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +24,12 @@ class SearchCountryViewModel @Inject constructor(
 
     private val _searchState = mutableStateOf(SearchState())
     val searchState: State<SearchState> = _searchState
+
+    private val _detailsState = mutableStateOf(DetailsState(null))
+    val detailsState: State<DetailsState> = _detailsState
+
+    private val _showDetail = mutableStateOf(false)
+    val showDetail: State<Boolean> = _showDetail
 
     init {
         getCountries()
@@ -58,5 +66,14 @@ class SearchCountryViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun countryClicked(countryInfo: CountryInfo) {
+        _detailsState.value = _detailsState.value.copy(countryInfo = countryInfo)
+        _showDetail.value = true
+    }
+
+    fun onBackPressed() {
+        _showDetail.value = false
     }
 }
