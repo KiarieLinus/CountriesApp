@@ -17,7 +17,7 @@ You can click [Appetize.io](https://appetize.io/app/bhdpkf4gr23eqd6vau3bp6ffzm?d
 
 The app has two screens namely the SearchCountryScreen which is the first screen that offers a list of grouped countries, clicking on a country item navigates to the  CountryDetailsScreen that shows details concerning selected country
 
-The design is from [Design](figma.com/file/v9AXj4VZNnx26fTthrPbhX/Explore?node-id=0%3A1)
+The design is from [Design](https://www.figma.com/file/v9AXj4VZNnx26fTthrPbhX/Explore)
 
 ## Features to be added
 
