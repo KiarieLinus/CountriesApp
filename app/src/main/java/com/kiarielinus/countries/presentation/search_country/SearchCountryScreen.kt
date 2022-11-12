@@ -1,6 +1,5 @@
 package com.kiarielinus.countries.presentation.search_country
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,7 +14,7 @@ import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,70 +26,119 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.kiarielinus.countries.presentation.Screen
-import com.kiarielinus.countries.presentation.country_details.CountryDetailsScreen
 import com.kiarielinus.countries.presentation.ui.theme.*
+import dagger.Lazy
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
+enum class SheetContent {
+    TRANSLATIONS, FILTERS, NONE
+}
+
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SearchCountryScreen(
     navController: NavController,
     viewModel: SearchCountryViewModel
 ) {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
-    ) {
-        val state = viewModel.searchState.value
-        val scrollState = rememberLazyListState()
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 24.dp)
-                .padding(top = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            state = scrollState
-        ) {
-            stickyHeader {
-                Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
-                    SearchPane()
-                    ConfigPane(
-                        language = "EN",
-                        onLangChange = { /*TODO*/ },
-                        onFilterChange = {}
+    val scaffoldState =
+        rememberBottomSheetScaffoldState(
+            bottomSheetState = BottomSheetState(
+                initialValue = BottomSheetValue.Collapsed
+            )
+        )
+
+    val scope = rememberCoroutineScope()
+    var sheetContent by remember { mutableStateOf(SheetContent.NONE) }
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            Column(
+                modifier = Modifier
+                    .background(MaterialTheme.colors.background)
+                    .padding(horizontal = 24.dp)
+                    .padding(
+                        top = 16.dp
                     )
-                }
-            }
-
-            val countries = state.countries
-            val groupedCountries = countries.groupBy { it.name.first() }
-
-            if (!state.isLoading && state.error.isBlank()) {
-                groupedCountries.forEach { entry ->
-                    item { Text(text = entry.key.toString(), color = Gray900) }
-                    items(entry.value) { item ->
-                        CountryItem(
-                            flagImageUrl = item.flagUrl,
-                            countryName = item.name,
-                            countryCapital = item.capital
-                        ) {
-                            viewModel.countryClicked(item)
-                            navController.navigate(Screen.Detail.route)
+            ) {
+                SearchPane()
+                ConfigPane(
+                    language = "EN",
+                    onLangChange = {
+                        sheetContent = SheetContent.TRANSLATIONS
+                        scope.launch {
+                            scaffoldState.bottomSheetState.expand()
                         }
-                        Spacer(modifier = Modifier.height(4.dp))
-
+                    },
+                    onFilterChange = { sheetContent = SheetContent.FILTERS }
+                )
+            }
+        },
+        sheetPeekHeight = 0.dp,
+        sheetContent = {
+            when (sheetContent) {
+                SheetContent.TRANSLATIONS -> {
+                    TranslationsSheet()
+                }
+                SheetContent.FILTERS -> {
+                    FiltersSheet()
+                }
+                SheetContent.NONE -> {
+                    scope.launch {
+                        scaffoldState.bottomSheetState.collapse()
                     }
                 }
-            } else {
-                item { Text(text = state.error, color = Gray900) }
             }
         }
+    ) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colors.background
+        ) {
+            val state = viewModel.searchState.value
+            val scrollState = rememberLazyListState()
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                state = scrollState
+            ) {
+                val countries = state.countries
+                val groupedCountries = countries.groupBy { it.name.first() }
+                if (!state.isLoading && state.error.isBlank()) {
+                    groupedCountries.forEach { entry ->
+                        item { Text(text = entry.key.toString(), color = Gray900) }
+                        items(entry.value) { item ->
+                            CountryItem(
+                                flagImageUrl = item.flagUrl,
+                                countryName = item.name,
+                                countryCapital = item.capital
+                            ) {
+                                viewModel.countryClicked(item)
+                                navController.navigate(Screen.Detail.route)
+                            }
+                        }
+                    }
+                } else {
+                    item { Text(text = state.error, color = Gray900) }
+                }
+            }
 
+        }
     }
+}
 
+@Composable
+fun FiltersSheet() {
+    TODO("Add the Filters for BottomSheet")
+}
+
+@Composable
+fun TranslationsSheet() {
+    TODO("Add translation for BottomSheet")
 }
 
 @Composable
@@ -116,7 +164,7 @@ fun SearchPane() {
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         BasicTextField(
             value = "",
             onValueChange = {},

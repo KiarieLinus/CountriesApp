@@ -23,5 +23,6 @@ data class CountryInfo(
     val coatOfArmsUrl: String?,
     val mapUrl: String,
     val currencyName: String,
-    val currencySymbol: String
+    val currencySymbol: String,
+    val translations: Map<String, String>?
 ) : Parcelable

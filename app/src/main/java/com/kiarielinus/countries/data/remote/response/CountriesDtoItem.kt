@@ -96,7 +96,8 @@ data class CountriesDtoItem(
             coatOfArmsUrl = coatOfArms?.png,
             mapUrl = maps.openStreetMaps,
             currencyName = currencies?.values?.first()?.name ?: "",
-            currencySymbol = currencies?.values?.first()?.symbol ?: ""
+            currencySymbol = currencies?.values?.first()?.symbol ?: "",
+            translations = translations?.entries?.associate { it.key to it.value.common}
         )
     }
 }
