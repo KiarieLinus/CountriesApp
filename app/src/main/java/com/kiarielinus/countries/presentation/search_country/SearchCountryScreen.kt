@@ -1,6 +1,5 @@
 package com.kiarielinus.countries.presentation.search_country
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
@@ -18,77 +16,81 @@ import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.kiarielinus.countries.presentation.Screen
 import com.kiarielinus.countries.presentation.country_details.CountryDetailsScreen
 import com.kiarielinus.countries.presentation.ui.theme.*
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchCountryScreen(
-    viewModel: SearchCountryViewModel = hiltViewModel()
+    navController: NavController,
+    viewModel: SearchCountryViewModel
 ) {
-    val state = viewModel.searchState.value
-
-    when (viewModel.showDetail.value) {
-        true -> CountryDetailsScreen()
-        false -> {
-            val scrollState = rememberLazyListState()
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp)
-                    .padding(top = 24.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                state = scrollState
-            ) {
-                stickyHeader {
-                    Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
-                        SearchPane()
-                        ConfigPane(
-                            language = "EN",
-                            onLangChange = { /*TODO*/ },
-                            onFilterChange = {}
-                        )
-                    }
-                }
-
-                val countries = state.countries
-                val groupedCountries = countries.groupBy { it.name.first() }
-
-                if (!state.isLoading && state.error.isBlank()) {
-                    groupedCountries.forEach { entry ->
-                        item { Text(text = entry.key.toString(), color = Gray900) }
-                        items(entry.value) { item ->
-                            CountryItem(
-                                flagImageUrl = item.flagUrl,
-                                countryName = item.name,
-                                countryCapital = item.capital
-                            ) { viewModel.countryClicked(item) }
-                            Spacer(modifier = Modifier.height(4.dp))
-
-                        }
-                    }
-                } else {
-                    item { Text(text = state.error, color = Gray900) }
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background
+    ) {
+        val state = viewModel.searchState.value
+        val scrollState = rememberLazyListState()
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp)
+                .padding(top = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            state = scrollState
+        ) {
+            stickyHeader {
+                Column(modifier = Modifier.background(MaterialTheme.colors.background)) {
+                    SearchPane()
+                    ConfigPane(
+                        language = "EN",
+                        onLangChange = { /*TODO*/ },
+                        onFilterChange = {}
+                    )
                 }
             }
+
+            val countries = state.countries
+            val groupedCountries = countries.groupBy { it.name.first() }
+
+            if (!state.isLoading && state.error.isBlank()) {
+                groupedCountries.forEach { entry ->
+                    item { Text(text = entry.key.toString(), color = Gray900) }
+                    items(entry.value) { item ->
+                        CountryItem(
+                            flagImageUrl = item.flagUrl,
+                            countryName = item.name,
+                            countryCapital = item.capital
+                        ) {
+                            viewModel.countryClicked(item)
+                            navController.navigate(Screen.Detail.route)
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                    }
+                }
+            } else {
+                item { Text(text = state.error, color = Gray900) }
+            }
         }
+
     }
+
 }
 
 @Composable
@@ -208,15 +210,6 @@ fun ConfigButton(
         )
     }
 }
-
-//@Composable
-//fun CountryList(
-//
-//) {
-//    LazyColumn{
-//
-//    }
-//}
 
 @Composable
 fun CountryItem(

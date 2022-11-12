@@ -10,16 +10,13 @@ import com.kiarielinus.countries.domain.use_cases.UseCases
 import com.kiarielinus.countries.presentation.country_details.DetailsState
 import com.kiarielinus.countries.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchCountryViewModel @Inject constructor(
-    private val repository: CountriesRepository
+    private val useCases: UseCases
 ) : ViewModel() {
 
     private val _searchState = mutableStateOf(SearchState())
@@ -28,9 +25,6 @@ class SearchCountryViewModel @Inject constructor(
     private val _detailsState = mutableStateOf(DetailsState(null))
     val detailsState: State<DetailsState> = _detailsState
 
-    private val _showDetail = mutableStateOf(false)
-    val showDetail: State<Boolean> = _showDetail
-
     init {
         getCountries()
     }
@@ -38,7 +32,7 @@ class SearchCountryViewModel @Inject constructor(
     private var job: Job? = null
     private fun getCountries() {
         viewModelScope.launch {
-            when (val resource = repository.getCountriesData()) {
+            when (val resource = useCases.getCountriesList()) {
                 is Resource.Error -> {
                     resource.message?.let {
                         _searchState.value = _searchState.value.copy(
@@ -70,10 +64,5 @@ class SearchCountryViewModel @Inject constructor(
 
     fun countryClicked(countryInfo: CountryInfo) {
         _detailsState.value = _detailsState.value.copy(countryInfo = countryInfo)
-        _showDetail.value = true
-    }
-
-    fun onBackPressed() {
-        _showDetail.value = false
     }
 }

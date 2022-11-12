@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -23,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -37,44 +39,53 @@ import com.kiarielinus.countries.presentation.ui.theme.Gray900
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CountryDetailsScreen(
-    viewModel: SearchCountryViewModel = hiltViewModel()
+    navController: NavController,
+    viewModel: SearchCountryViewModel
 ) {
-    val state = viewModel.detailsState.value
-    val countryInfo = state.countryInfo!!
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.background
+    ) {
+        val state = viewModel.detailsState.value
+        val countryInfo = state.countryInfo!!
 
-    LazyColumn {
-        stickyHeader {
-            DetailsTopBar(
-                onBackClicked = { viewModel.onBackPressed() },
-                countryName = countryInfo.name
-            )
-            FlagBanner(
-                flagUrl = countryInfo.flagUrl,
-                coatOfArmsUrl = countryInfo.coatOfArmsUrl,
-                countryName = countryInfo.name
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-        item{
-            DetailItem(label ="Population" , detail = countryInfo.population.toString())
-            DetailItem(label = "Continent", detail = countryInfo.continent.joinToString())
-            DetailItem(label = "Capital", detail = countryInfo.capital)
-            DetailItem(label = "UN Member State", detail = countryInfo.unMember.toString())
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-        item{
-            DetailItem(label = "Citizen Name", detail = countryInfo.demonyms)
-            DetailItem(label = "Currency", detail = countryInfo.currencyName)
-            DetailItem(label = "Currency Symbol", detail = countryInfo.currencySymbol)
-            DetailItem(label = "Country Domain", detail = countryInfo.countryDomain.joinToString())
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-        item{
-            DetailItem(label = "Start of week", detail = countryInfo.startOfWeek)
-            DetailItem(label = "Time zone", detail = countryInfo.timezone.joinToString ())
-            DetailItem(label = "Dialling Code", detail = countryInfo.diallingCode)
-            DetailItem(label = "Driving side", detail = countryInfo.drivingSide)
-            Spacer(modifier = Modifier.height(24.dp))
+        LazyColumn {
+            stickyHeader {
+                DetailsTopBar(
+                    onBackClicked = { navController.popBackStack() },
+                    countryName = countryInfo.name
+                )
+                FlagBanner(
+                    flagUrl = countryInfo.flagUrl,
+                    coatOfArmsUrl = countryInfo.coatOfArmsUrl,
+                    countryName = countryInfo.name
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+            item {
+                DetailItem(label = "Population", detail = countryInfo.population.toString())
+                DetailItem(label = "Continent", detail = countryInfo.continent.joinToString())
+                DetailItem(label = "Capital", detail = countryInfo.capital)
+                DetailItem(label = "UN Member State", detail = countryInfo.unMember.toString())
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+            item {
+                DetailItem(label = "Citizen Name", detail = countryInfo.demonyms)
+                DetailItem(label = "Currency", detail = countryInfo.currencyName)
+                DetailItem(label = "Currency Symbol", detail = countryInfo.currencySymbol)
+                DetailItem(
+                    label = "Country Domain",
+                    detail = countryInfo.countryDomain.joinToString()
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+            item {
+                DetailItem(label = "Start of week", detail = countryInfo.startOfWeek)
+                DetailItem(label = "Time zone", detail = countryInfo.timezone.joinToString())
+                DetailItem(label = "Dialling Code", detail = countryInfo.diallingCode)
+                DetailItem(label = "Driving side", detail = countryInfo.drivingSide)
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 }
@@ -157,7 +168,7 @@ fun DetailsTopBar(
                 .height(17.6.dp)
                 .weight(1f)
                 .clickable { onBackClicked() },
-            tint = if(isSystemInDarkTheme())Gray100 else Gray900
+            tint = if (isSystemInDarkTheme()) Gray100 else Gray900
         )
         Text(
             text = countryName,
@@ -167,24 +178,24 @@ fun DetailsTopBar(
             textAlign = TextAlign.Center,
             lineHeight = 32.9.sp,
             modifier = Modifier.weight(9f),
-            color = if(isSystemInDarkTheme())Gray200 else Gray900
+            color = if (isSystemInDarkTheme()) Gray200 else Gray900
         )
     }
 }
 
 @Composable
 fun DetailItem(
-    label:String,
+    label: String,
     detail: String
 ) {
-    Row (modifier = Modifier.padding(start = 24.dp, bottom = 4.dp)){
+    Row(modifier = Modifier.padding(start = 24.dp, bottom = 4.dp)) {
         Text(
             text = "$label: ",
             fontFamily = Axiforma,
             fontWeight = FontWeight.W500,
             fontSize = 16.sp,
             lineHeight = 25.66.sp,
-            color = if(isSystemInDarkTheme())Gray100 else Gray900
+            color = if (isSystemInDarkTheme()) Gray100 else Gray900
         )
         Text(
             text = detail,
@@ -192,7 +203,7 @@ fun DetailItem(
             fontWeight = FontWeight.W300,
             fontSize = 16.sp,
             lineHeight = 24.67.sp,
-            color = if(isSystemInDarkTheme())Gray100 else Gray900
+            color = if (isSystemInDarkTheme()) Gray100 else Gray900
         )
     }
 }

@@ -11,7 +11,7 @@ You can click [Appetize.io](https://appetize.io/app/bhdpkf4gr23eqd6vau3bp6ffzm?d
 
 - Navigation Compose : library to add navigation elements to your compose projects
 - Dagger-Hilt : a library for  dependency injection in Android apps that works seamlessly with Compose.
--Accompanist: Used as a paging library for horizantal paging of compossables
+-Accompanist: Used as a paging library for horizontal paging of composable
 
 ## Design & Features
 
@@ -21,7 +21,6 @@ The design is from [Design](figma.com/file/v9AXj4VZNnx26fTthrPbhX/Explore?node-i
 
 ## Features to be added
 
-- Navigation: Add a navHost 
 - Theming: Improve on the theming to make the mode change cleaner
 - List Filtering: Add the functions to filter the list by continent and time zone
 - Localisation: Add the function to get translation of the country name

@@ -1,5 +1,9 @@
 package com.kiarielinus.countries.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class CountryInfo(
     val name: String,
     val capital: String,
@@ -20,4 +24,4 @@ data class CountryInfo(
     val mapUrl: String,
     val currencyName: String,
     val currencySymbol: String
-)
+) : Parcelable
