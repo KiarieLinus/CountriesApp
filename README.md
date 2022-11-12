@@ -25,6 +25,7 @@ The design is from [Design](figma.com/file/v9AXj4VZNnx26fTthrPbhX/Explore?node-i
 - Theming: Improve on the theming to make the mode change cleaner
 - List Filtering: Add the functions to filter the list by continent and time zone
 - Localisation: Add the function to get translation of the country name
+- Search Feature: Add function for the country list search feature
 
 ## Challenges
 
