@@ -5,7 +5,7 @@ The CountriesApp was created as part of a stage3 task during th HNGI9 internship
 
 ## Appetize Link
 
-You can click [Appetize.io](https://appetize.io/app/bhdpkf4gr23eqd6vau3bp6ffzm?device=pixel4&osVersion=10.0&scale=75) to view the app
+You can click [Appetize.io](https://appetize.io/app/bhdpkf4gr23eqd6vau3bp6ffzm?device=pixel4&osVersion=10.0&scale=75) to view the app. (To be updated on 13/11)
 
 ## Libraries
 
@@ -29,4 +29,4 @@ The design is from [Design](figma.com/file/v9AXj4VZNnx26fTthrPbhX/Explore?node-i
 
 ## Challenges
 
-- Designing the DTO model: This took too much time since a nnumber of the elements are nullable and the JSON is quite large. A bit of debugging did the trick
+- Designing the DTO model: This took too much time since a number of the elements are nullable and the JSON is quite large. A bit of debugging did the trick
