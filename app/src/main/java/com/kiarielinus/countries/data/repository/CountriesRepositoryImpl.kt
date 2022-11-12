@@ -14,24 +14,18 @@ import java.util.Collections.emptyList
 class CountriesRepositoryImpl(
     private val api: CountriesApi
 ) : CountriesRepository {
-    override fun getCountriesData(): Flow<Resource<List<CountryInfo>>> = flow {
-
-        var response: List<CountriesDtoItem> = emptyList()
-        try {
-            emit(Resource.Loading())
-            response = api.getCountriesList().body()!!
-            emit(Resource.Success(data = response.map { it.toCountryInfo() }))
+    override suspend fun getCountriesData(): Resource<List<CountryInfo>> {
+//        Resource.Loading<List<CountryInfo>>()
+        return try {
+            val response = api.getCountriesList()
+            Resource.Success(data = response.map { it.toCountryInfo() })
         } catch (e: HttpException) {
-            emit(
-                Resource.Error(
-                    message = e.localizedMessage ?: "An unknown error occurred"
-                )
+            Resource.Error(
+                message = e.localizedMessage ?: "An unknown error occurred"
             )
         } catch (e: IOException) {
-            emit(
-                Resource.Error(
-                    message = "Couldn't reach server, check your internet connection"
-                )
+            Resource.Error(
+                message = "Couldn't reach server, check your internet connection"
             )
         }
     }

@@ -213,7 +213,7 @@ fun CountryItem(
         val state = painter.state
         val painterOnFailure = rememberVectorPainter(image = Icons.Outlined.Flag)
         Image(
-            painter = if (state is AsyncImagePainter.State.Success) painter else painterOnFailure,
+            painter = painterOnFailure,
             contentDescription = countryName,
             modifier = Modifier
                 .size(40.dp)

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 class GetCountriesList(
     private val repository: CountriesRepository
 ) {
-    operator fun invoke(): Flow<Resource<List<CountryInfo>>> {
+    suspend operator fun invoke(): Resource<List<CountryInfo>> {
         return repository.getCountriesData()
     }
 }

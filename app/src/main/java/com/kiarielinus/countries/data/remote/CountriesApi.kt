@@ -7,7 +7,7 @@ import retrofit2.http.GET
 interface CountriesApi {
 
     @GET("v3.1/all")
-    suspend fun getCountriesList(): Response<List<CountriesDtoItem>>
+    suspend fun getCountriesList(): List<CountriesDtoItem>
 
     companion object{
         const val BASE_URL = "https://restcountries.com/"

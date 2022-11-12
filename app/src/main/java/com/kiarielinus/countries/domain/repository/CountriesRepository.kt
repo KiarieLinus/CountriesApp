@@ -5,5 +5,5 @@ import com.kiarielinus.countries.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface CountriesRepository {
-    fun getCountriesData(): Flow<Resource<List<CountryInfo>>>
+    suspend fun getCountriesData(): Resource<List<CountryInfo>>
 }
