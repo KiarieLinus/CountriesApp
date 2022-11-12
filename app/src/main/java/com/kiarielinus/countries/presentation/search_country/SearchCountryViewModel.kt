@@ -41,9 +41,9 @@ class SearchCountryViewModel @Inject constructor(
                     }
                 }
                 is Resource.Success -> {
-                    resource.data?.let {
+                    resource.data?.let { list ->
                         _searchState.value = _searchState.value.copy(
-                            countries = it,
+                            countries = list.sortedBy{it.name},
                             isLoading = false,
                             error = ""
                         )

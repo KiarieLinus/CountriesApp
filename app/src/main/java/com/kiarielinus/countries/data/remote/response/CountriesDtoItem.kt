@@ -83,7 +83,7 @@ data class CountriesDtoItem(
             population = population,
             continent = continents,
             area = area,
-            demonyms = demonyms?.eng?.f ?: "Unspecified",//English doesn't really have a grammatical gender
+            demonyms = demonyms?.eng?.f ?: "Unspecified",//English doesn't have grammatical gender
             unMember = unMember,
             diallingCode = "${idd?.root}${idd?.suffixes?.first()}",
             landlocked = landlocked,
@@ -92,7 +92,7 @@ data class CountriesDtoItem(
             startOfWeek = startOfWeek,
             drivingSide = car.side,
             independent = independent,
-            flagUrl = flags.svg,
+            flagUrl = flags.png,
             coatOfArmsUrl = coatOfArms?.svg,
             mapUrl = maps.openStreetMaps,
             currencyName = currencies?.values?.first()?.name ?: "",
