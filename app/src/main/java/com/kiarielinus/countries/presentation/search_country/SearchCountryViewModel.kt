@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kiarielinus.countries.domain.model.CountryInfo
-import com.kiarielinus.countries.domain.repository.CountriesRepository
 import com.kiarielinus.countries.domain.use_cases.UseCases
 import com.kiarielinus.countries.presentation.country_details.DetailsState
 import com.kiarielinus.countries.util.Resource
