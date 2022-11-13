@@ -1,6 +1,5 @@
 package com.kiarielinus.countries.presentation.search_country
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,8 +7,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -21,7 +18,24 @@ import com.kiarielinus.countries.presentation.ui.theme.White
 
 @Composable
 fun FiltersScreen() {
-    TODO("Add the Filters for BottomSheet")
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(White)
+    ) {
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Filter",
+            fontFamily = Axiforma,
+            fontWeight = FontWeight.W700,
+            fontSize = 20.sp,
+            lineHeight = 32.9.sp,
+            color = Gray900,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+        )
+    }
 }
 
 @Composable

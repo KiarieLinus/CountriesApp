@@ -1,5 +1,6 @@
 package com.kiarielinus.countries.presentation.search_country
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,10 +49,25 @@ fun MainLayout(
     }
 
     val translations by remember { mutableStateOf(translationMapper().map { it.value }) }
-
     val languageKeyMap = translationMapper()
         .map { it.value to it.key }.toMap()
     val key = languageKeyMap[selectedLanguage]!!
+
+
+    //LOG ALL DISTINCT UTC & CONTINENTS IN THE DATA OBJECTS
+//    val timezones = mutableListOf<String>()
+//    countries.forEach { country ->
+//        timezones.addAll(country.timezone)
+//    }
+//    val distinctTimeZone = timezones.distinct()
+//    Log.d("MainLayoutUTC", distinctTimeZone.sorted().toString())
+
+//    val continents = mutableListOf<String>()
+//    countries.forEach {
+//        continents.addAll(it.continent)
+//    }
+//    val distinctContinents = continents.distinct()
+//    Log.d("MainLayoutContinent", distinctContinents.sorted().toString())
 
     BackdropScaffold(
         headerHeight = 0.dp,
@@ -77,7 +93,11 @@ fun MainLayout(
                         )
                     },
                     onFilterChange = {
-                        TODO()
+                        openSheet(
+                            BottomSheetScreen.FiltersScreen(
+
+                            )
+                        )
                     }
                 )
             }
@@ -103,20 +123,27 @@ fun MainLayout(
                                 flagImageUrl = item.flagUrl,
                                 countryName = if (selectedLanguage == translationMapper()["eng"]!!) item.name
                                 else
-                                    if (item.translations?.containsKey(key) == true) item.translations.getValue(key) else item.name,
+                                    if (item.translations?.containsKey(key) == true) item.translations.getValue(
+                                        key
+                                    ) else item.name,
                                 countryCapital = item.capital
                             ) {
                                 onCountryClicked(item)
                             }
                         }
                     }
-                    item{Spacer(modifier = Modifier.height(24.dp))}
+                    item { Spacer(modifier = Modifier.height(24.dp)) }
                 }
             }
         },
         frontLayerContent = {
             currentBottomSheet?.let { currentSheet ->
-                SheetLayout(currentSheet, closeSheet, selectedLanguage, onLangSelected)
+                SheetLayout(
+                    currentSheet,
+                    closeSheet,
+                    selectedLanguage,
+                    onLangSelected
+                )
             }
         },
         peekHeight = peekHeight,

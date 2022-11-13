@@ -14,7 +14,9 @@ fun SheetLayout(
 ) {
     BottomSheetWithCloseDialog(onClosePressed = closeSheet) {
         when (currentScreen) {
-            is BottomSheetScreen.FiltersScreen -> TODO()
+            is BottomSheetScreen.FiltersScreen -> FiltersScreen(
+
+            )
             is BottomSheetScreen.TranslationsScreen -> TranslationsScreen(
                 translations = currentScreen.translations,
                 selectedValue = selectedValue
