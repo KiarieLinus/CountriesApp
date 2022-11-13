@@ -10,11 +10,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DisabledByDefault
 import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,7 +32,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.kiarielinus.countries.presentation.Screen
 import com.kiarielinus.countries.presentation.ui.theme.*
-import dagger.Lazy
+import com.kiarielinus.countries.util.translationMapper
 import kotlinx.coroutines.launch
 
 enum class SheetContent {
@@ -43,15 +45,19 @@ fun SearchCountryScreen(
     navController: NavController,
     viewModel: SearchCountryViewModel
 ) {
+
+    val state = viewModel.searchState.value
+    val countries = state.countries
+
     val scaffoldState =
         rememberBottomSheetScaffoldState(
             bottomSheetState = BottomSheetState(
                 initialValue = BottomSheetValue.Collapsed
             )
         )
-
     val scope = rememberCoroutineScope()
     var sheetContent by remember { mutableStateOf(SheetContent.NONE) }
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -67,9 +73,9 @@ fun SearchCountryScreen(
                 ConfigPane(
                     language = "EN",
                     onLangChange = {
-                        sheetContent = SheetContent.TRANSLATIONS
                         scope.launch {
                             scaffoldState.bottomSheetState.expand()
+                            sheetContent = SheetContent.TRANSLATIONS
                         }
                     },
                     onFilterChange = { sheetContent = SheetContent.FILTERS }
@@ -77,10 +83,13 @@ fun SearchCountryScreen(
             }
         },
         sheetPeekHeight = 0.dp,
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContent = {
             when (sheetContent) {
                 SheetContent.TRANSLATIONS -> {
-                    TranslationsSheet()
+                    TranslationsSheet(
+                        translations = translationMapper().map { it.value to it.key }.toMap()
+                    ) { sheetContent = SheetContent.NONE }
                 }
                 SheetContent.FILTERS -> {
                     FiltersSheet()
@@ -97,7 +106,7 @@ fun SearchCountryScreen(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            val state = viewModel.searchState.value
+
             val scrollState = rememberLazyListState()
             LazyColumn(
                 modifier = Modifier
@@ -106,7 +115,6 @@ fun SearchCountryScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 state = scrollState
             ) {
-                val countries = state.countries
                 val groupedCountries = countries.groupBy { it.name.first() }
                 if (!state.isLoading && state.error.isBlank()) {
                     groupedCountries.forEach { entry ->
@@ -137,8 +145,61 @@ fun FiltersSheet() {
 }
 
 @Composable
-fun TranslationsSheet() {
-    TODO("Add translation for BottomSheet")
+fun TranslationsSheet(
+    translations: Map<String, String>,
+    onCloseClick: () -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
+            .background(White)
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(24.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = CenterVertically
+            ) {
+                Text(
+                    text = "Languages",
+                    fontFamily = Axiforma,
+                    fontWeight = FontWeight.W700,
+                    fontSize = 20.sp,
+                    lineHeight = 32.9.sp,
+                    color = Gray900
+                )
+
+                Icon(
+                    imageVector = Icons.Filled.DisabledByDefault,
+                    contentDescription = "close",
+                    modifier = Modifier.clickable { onCloseClick() })
+            }
+        }
+        items(translations.keys.toList()) { translation ->
+            val selectedValue = remember { mutableStateOf("") }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = translation,
+                    fontFamily = Axiforma,
+                    fontWeight = FontWeight.W400,
+                    fontSize = 16.sp,
+                    lineHeight = 24.sp,
+                    color = Gray900
+                )
+                RadioButton(
+                    modifier = Modifier.size(18.dp),
+                    selected = selectedValue.value == translation,
+                    onClick = { selectedValue.value = translation }
+                )
+            }
+        }
+    }
 }
 
 @Composable
