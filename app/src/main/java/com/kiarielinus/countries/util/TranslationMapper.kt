@@ -1,6 +1,6 @@
 package com.kiarielinus.countries.util
 
-fun translationMapper(): Map<String,String> = mapOf(
+fun translationMapper(): Map<String, String> = mapOf(
     "ara" to "Arabic",
     "bre" to "Breton",
     "ces" to "Czech",
@@ -25,4 +25,5 @@ fun translationMapper(): Map<String,String> = mapOf(
     "tur" to "Turkish",
     "urd" to "Urdu",
     "zho" to "Chinese",
+    "eng" to "English"
 )

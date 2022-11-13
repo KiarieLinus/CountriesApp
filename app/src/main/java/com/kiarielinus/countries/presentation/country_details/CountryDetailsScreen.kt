@@ -30,7 +30,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.kiarielinus.countries.presentation.search_country.SearchCountryViewModel
+import com.kiarielinus.countries.presentation.CountryViewModel
 import com.kiarielinus.countries.presentation.ui.theme.Axiforma
 import com.kiarielinus.countries.presentation.ui.theme.Gray100
 import com.kiarielinus.countries.presentation.ui.theme.Gray200
@@ -40,7 +40,7 @@ import com.kiarielinus.countries.presentation.ui.theme.Gray900
 @Composable
 fun CountryDetailsScreen(
     navController: NavController,
-    viewModel: SearchCountryViewModel
+    viewModel: CountryViewModel
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),

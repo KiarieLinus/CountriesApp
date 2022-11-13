@@ -10,16 +10,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.kiarielinus.countries.presentation.CountryViewModel
 import com.kiarielinus.countries.presentation.Screen
 
 
 @Composable
 fun SearchCountryScreen(
     navController: NavController,
-    viewModel: SearchCountryViewModel
+    viewModel: CountryViewModel
 ) {
     val state = viewModel.searchState.value
     val countries = state.countries
+    val selectedLanguage = viewModel.selectedLanguage.value
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -28,11 +30,14 @@ fun SearchCountryScreen(
         val screenHeight = LocalConfiguration.current.screenHeightDp
         MainLayout(
             countries = countries,
-            screenHeight = screenHeight
-        ) {
-            viewModel.countryClicked(it)
-            navController.navigate(Screen.Detail.route)
-        }
+            screenHeight = screenHeight,
+            {
+                viewModel.countryClicked(it)
+                navController.navigate(Screen.Detail.route)
+            },
+            selectedLanguage,
+            { viewModel.onLanguageSelected(it) }
+        )
     }
 }
 

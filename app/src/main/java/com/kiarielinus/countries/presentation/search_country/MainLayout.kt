@@ -1,10 +1,7 @@
 package com.kiarielinus.countries.presentation.search_country
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -16,13 +13,16 @@ import com.kiarielinus.countries.domain.model.CountryInfo
 import com.kiarielinus.countries.presentation.ui.theme.Gray900
 import com.kiarielinus.countries.util.translationMapper
 import kotlinx.coroutines.launch
+import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainLayout(
     countries: List<CountryInfo>,
     screenHeight: Int,
-    onCountryClicked: (country: CountryInfo) -> Unit
+    onCountryClicked: (country: CountryInfo) -> Unit,
+    selectedLanguage: String,
+    onLangSelected: (String) -> Unit
 ) {
     var peekHeight by remember {
         mutableStateOf(56.dp)
@@ -49,6 +49,9 @@ fun MainLayout(
 
     val translations by remember { mutableStateOf(translationMapper().map { it.value }) }
 
+    val languageKeyMap = translationMapper()
+        .map { it.value to it.key }.toMap()
+    val key = languageKeyMap[selectedLanguage]!!
 
     BackdropScaffold(
         headerHeight = 0.dp,
@@ -64,13 +67,12 @@ fun MainLayout(
             ) {
                 SearchPane()
                 ConfigPane(
-                    language = "EN",
+                    language = key.uppercase(Locale.getDefault()),
                     onLangChange = {
                         peekHeight = (screenHeight * 0.22).dp
                         openSheet(
                             BottomSheetScreen.TranslationsScreen(
-                                translations,
-                                peekHeight
+                                translations
                             )
                         )
                     },
@@ -99,20 +101,22 @@ fun MainLayout(
                         items(entry.value) { item ->
                             CountryItem(
                                 flagImageUrl = item.flagUrl,
-                                countryName = item.name,
+                                countryName = if (selectedLanguage == translationMapper()["eng"]!!) item.name
+                                else
+                                    if (item.translations?.containsKey(key) == true) item.translations.getValue(key) else item.name,
                                 countryCapital = item.capital
                             ) {
                                 onCountryClicked(item)
                             }
                         }
                     }
-
+                    item{Spacer(modifier = Modifier.height(24.dp))}
                 }
             }
         },
         frontLayerContent = {
             currentBottomSheet?.let { currentSheet ->
-                SheetLayout(currentSheet, closeSheet)
+                SheetLayout(currentSheet, closeSheet, selectedLanguage, onLangSelected)
             }
         },
         peekHeight = peekHeight,

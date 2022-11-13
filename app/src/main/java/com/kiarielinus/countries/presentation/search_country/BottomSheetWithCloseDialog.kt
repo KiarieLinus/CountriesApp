@@ -28,8 +28,8 @@ fun BottomSheetWithCloseDialog(
             onClick = onClosePressed,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(24.dp)
-                .size(18.dp)
+                .padding(18.dp)
+                .size(24.dp)
 
         ) {
             Icon(Icons.Filled.DisabledByDefault, tint = closeButtonColor, contentDescription = null)

@@ -50,7 +50,7 @@ fun CountryItem(
                 fontSize = 14.sp,
                 lineHeight = 22.18.sp,
                 letterSpacing = (-0.3).sp,
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Start,
                 fontWeight = FontWeight.W400,
                 color = Gray900
             )

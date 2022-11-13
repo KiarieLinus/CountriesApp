@@ -97,7 +97,7 @@ data class CountriesDtoItem(
             mapUrl = maps.openStreetMaps,
             currencyName = currencies?.values?.first()?.name ?: "",
             currencySymbol = currencies?.values?.first()?.symbol ?: "",
-            translations = translations?.entries?.associate { it.key to it.value.common}
+            translations = translations?.entries?.associate { it.key to it.value.official}
         )
     }
 }
