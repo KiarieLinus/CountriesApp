@@ -1,7 +1,6 @@
 package com.kiarielinus.countries.presentation.search_country
 
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kiarielinus.countries.domain.model.CountryInfo
-import com.kiarielinus.countries.presentation.ui.theme.Gray900
 import com.kiarielinus.countries.util.translationMapper
 import kotlinx.coroutines.launch
 import java.util.*
@@ -32,7 +30,9 @@ fun MainLayout(
     onFilterValueSelected: (String) -> Unit,
     onFilterUnselected: (String) -> Unit,
     getFilteredList: () -> List<CountryInfo>,
-    getSearchedList: (String) -> List<CountryInfo>
+    getSearchedList: (String) -> List<CountryInfo>,
+    selectedFilters: () -> List<String>,
+    onReset: () -> Unit
 ) {
     var peekHeight by remember {
         mutableStateOf(56.dp)
@@ -211,13 +211,16 @@ fun MainLayout(
                     isTimeZoneClicked = isTimeZoneClicked,
                     onRevealTimeZone = onTimeZoneReveal,
                     submitFilers = { currentListMode = submitFilters() },
+                    onFilterUnselected = { onFilterUnselected(it) },
                     onFilterValueSelected = { onFilterValueSelected(it) },
-                    onReset = {ListMode.Language},
-                    onFilterUnselected = { onFilterUnselected(it) }
+                    onReset = {
+                        onReset()
+                        ListMode.Language
+                              },
+                    selectedFilters = selectedFilters
                 )
             }
         },
-        peekHeight = peekHeight,
         scaffoldState = backdropState
     )
 }

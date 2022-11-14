@@ -129,4 +129,12 @@ class CountryViewModel @Inject constructor(
         val countries = _searchState.value.countries
         return countries.filter { it.name.contains(query,ignoreCase = true) }
     }
+
+    fun getSelectedFilters():List<String> {
+        return  _filterList.value.distinct()
+    }
+
+    fun clearFilters() {
+        _filterList.value.clear()
+    }
 }

@@ -1,7 +1,6 @@
 package com.kiarielinus.countries.presentation.search_country
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FilterAlt
@@ -41,15 +40,18 @@ fun SearchCountryScreen(
             isContinentClicked = viewModel.isContinentClicked.value,
             onTimeZoneReveal = { viewModel.updateIsTimeZoneClicked() },
             isTimeZoneClicked = viewModel.isTimeZoneClicked.value,
-            onFilterUnselected = {
-                viewModel.unselectFilter(it)
-            },
-            onFilterValueSelected = { viewModel.selectFilter(it) },
             submitFilters = {
                 ListMode.Filters
             },
-            getFilteredList = { viewModel.getFilteredList() }
-        ) { viewModel.getSearched(it) }
+            onFilterValueSelected = { viewModel.selectFilter(it) },
+            onFilterUnselected = {
+                viewModel.unselectFilter(it)
+            },
+            getFilteredList = { viewModel.getFilteredList() },
+            { viewModel.getSearched(it) },
+            selectedFilters = {viewModel.getSelectedFilters()},
+            onReset = {viewModel.clearFilters()}
+        )
     }
 }
 

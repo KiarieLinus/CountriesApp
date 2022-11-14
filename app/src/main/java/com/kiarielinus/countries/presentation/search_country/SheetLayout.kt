@@ -1,11 +1,6 @@
 package com.kiarielinus.countries.presentation.search_country
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 
 @Composable
 fun SheetLayout(
@@ -20,7 +15,8 @@ fun SheetLayout(
     submitFilers: () -> Unit,
     onFilterUnselected: (String) -> Unit,
     onFilterValueSelected: (String) -> Unit,
-    onReset: () -> Unit
+    onReset: () -> Unit,
+    selectedFilters: () -> List<String>
 ) {
     BottomSheetWithCloseDialog(onClosePressed = closeSheet) {
         when (currentScreen) {
@@ -32,7 +28,8 @@ fun SheetLayout(
                 submitFilters = { submitFilers() },
                 onFilterUnselected = { onFilterUnselected(it) },
                 onFilterValueSelected = { onFilterValueSelected(it) },
-                onReset = onReset
+                onReset = onReset,
+                selectedFilters = selectedFilters
             )
             is BottomSheetScreen.TranslationsScreen -> TranslationsScreen(
                 translations = currentScreen.translations,

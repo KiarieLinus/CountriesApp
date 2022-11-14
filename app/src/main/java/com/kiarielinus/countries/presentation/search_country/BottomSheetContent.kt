@@ -1,7 +1,5 @@
 package com.kiarielinus.countries.presentation.search_country
 
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,7 +8,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -20,7 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kiarielinus.countries.R
-import com.kiarielinus.countries.presentation.ui.theme.*
+import com.kiarielinus.countries.presentation.ui.theme.Axiforma
+import com.kiarielinus.countries.presentation.ui.theme.Gray500
+import com.kiarielinus.countries.presentation.ui.theme.Orange
 import com.kiarielinus.countries.util.getContinents
 import com.kiarielinus.countries.util.getTimeZones
 
@@ -33,7 +35,8 @@ fun FiltersScreen(
     submitFilters: () -> Unit,
     onReset: () -> Unit,
     onFilterValueSelected: (String) -> Unit,
-    onFilterUnselected: (String) -> Unit
+    onFilterUnselected: (String) -> Unit,
+    selectedFilters: () -> List<String>
 ) {
     Column(
         modifier = Modifier
@@ -66,7 +69,7 @@ fun FiltersScreen(
                             lineHeight = 24.sp,
 //                            color = Gray900
                         )
-                        val checkedState = remember { mutableStateOf(false) }
+                        val checkedState = remember { mutableStateOf(selectedFilters().contains(continent)) }
                         Checkbox(
                             modifier = Modifier.size(18.dp),
                             checked = checkedState.value,
@@ -107,7 +110,7 @@ fun FiltersScreen(
                             lineHeight = 24.sp,
 //                            color = Gray900
                         )
-                        val checkedState = remember { mutableStateOf(false) }
+                        val checkedState = remember { mutableStateOf(selectedFilters().contains(timeZone)) }
                         Checkbox(
                             modifier = Modifier.size(18.dp),
                             checked = checkedState.value,
