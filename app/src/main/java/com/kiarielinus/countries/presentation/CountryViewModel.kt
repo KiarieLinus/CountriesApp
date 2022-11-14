@@ -124,4 +124,9 @@ class CountryViewModel @Inject constructor(
 
         return _countriesInFilter.value.distinct().sortedBy { it.name }
     }
+
+    fun getSearched(query: String): List<CountryInfo>{
+        val countries = _searchState.value.countries
+        return countries.filter { it.name.contains(query,ignoreCase = true) }
+    }
 }

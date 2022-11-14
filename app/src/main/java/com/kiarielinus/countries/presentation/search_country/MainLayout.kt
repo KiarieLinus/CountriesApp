@@ -30,9 +30,9 @@ fun MainLayout(
     isTimeZoneClicked: Boolean,
     submitFilters: () -> ListMode,
     onFilterValueSelected: (String) -> Unit,
-    onReset: () -> Unit,
     onFilterUnselected: (String) -> Unit,
-    getFilteredList: () -> List<CountryInfo>
+    getFilteredList: () -> List<CountryInfo>,
+    getSearchedList: (String) -> List<CountryInfo>
 ) {
     var peekHeight by remember {
         mutableStateOf(56.dp)
@@ -104,9 +104,6 @@ fun MainLayout(
                 ConfigPane(
                     language = key.uppercase(Locale.getDefault()),
                     onLangChange = {
-                        if(currentListMode != ListMode.Language){
-                            currentListMode = ListMode.Language
-                        }
                         isLangClicked = true
                         openSheet(
                             BottomSheetScreen.TranslationsScreen(
@@ -141,7 +138,7 @@ fun MainLayout(
                         is ListMode.Filters -> {
                             val filteredCountries = getFilteredList()
 
-                            items(filteredCountries){ item ->
+                            items(filteredCountries) { item ->
                                 CountryItem(
                                     flagImageUrl = item.flagUrl,
                                     countryName = if (selectedLanguage == translationMapper()["eng"]!!) item.name
@@ -157,6 +154,23 @@ fun MainLayout(
                             Log.d("ListMode", "Filter")
                         }
                         is ListMode.Search -> {
+                            val countryName = (currentListMode as ListMode.Search).name
+                            if (countryName.isBlank()) {
+                                ListMode.Language
+                            }
+                            items(getSearchedList(countryName)) { item ->
+                                CountryItem(
+                                    flagImageUrl = item.flagUrl,
+                                    countryName = if (selectedLanguage == translationMapper()["eng"]!!) item.name
+                                    else
+                                        if (item.translations?.containsKey(key) == true) item.translations.getValue(
+                                            key
+                                        ) else item.name,
+                                    countryCapital = item.capital
+                                ) {
+                                    onCountryClicked(item)
+                                }
+                            }
                             Log.d("ListMode", "Search")
                         }
                         is ListMode.Language -> {
@@ -196,7 +210,7 @@ fun MainLayout(
                     onRevealTimeZone = onTimeZoneReveal,
                     submitFilers = { currentListMode = submitFilters() },
                     onFilterValueSelected = { onFilterValueSelected(it) },
-                    onReset = onReset,
+                    onReset = {ListMode.Language},
                     onFilterUnselected = { onFilterUnselected(it) }
                 )
             }

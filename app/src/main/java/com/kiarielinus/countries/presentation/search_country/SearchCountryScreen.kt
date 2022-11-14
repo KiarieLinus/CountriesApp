@@ -44,13 +44,12 @@ fun SearchCountryScreen(
             onFilterUnselected = {
                 viewModel.unselectFilter(it)
             },
-            onReset = {},
             onFilterValueSelected = { viewModel.selectFilter(it) },
             submitFilters = {
                 ListMode.Filters
             },
-            getFilteredList = {viewModel.getFilteredList()}
-        )
+            getFilteredList = { viewModel.getFilteredList() }
+        ) { viewModel.getSearched(it) }
     }
 }
 
@@ -59,7 +58,7 @@ fun SearchCountryScreen(
 )
 @Composable
 fun SearchPanePrev() {
-    SearchPane(setSearchMode = {ListMode.Search("")})
+    SearchPane(setSearchMode = { ListMode.Search("") })
 }
 
 @Preview(
