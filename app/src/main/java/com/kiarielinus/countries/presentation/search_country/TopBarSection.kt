@@ -16,7 +16,6 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -27,7 +26,7 @@ import com.kiarielinus.countries.presentation.ui.theme.*
 
 @Composable
 fun SearchPane(
-    hint: String =""
+    setSearchMode: (ListMode) -> Unit
 ) {
     Column {
         Row(
@@ -54,15 +53,12 @@ fun SearchPane(
         var text by remember {
             mutableStateOf("")
         }
-        var isHintDisplayed by remember {
-            mutableStateOf(hint != "")
-        }
         Box(Modifier.height(48.dp)) {
             BasicTextField(
                 value = text,
                 onValueChange = {
                     text = it
-                    ListFilters.Search(it)
+                    setSearchMode(ListMode.Search(it))
                 },
                 maxLines = 1,
                 singleLine = true,

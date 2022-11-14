@@ -1,6 +1,5 @@
 package com.kiarielinus.countries.presentation.search_country
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -48,10 +47,10 @@ fun SearchCountryScreen(
             onReset = {},
             onFilterValueSelected = { viewModel.selectFilter(it) },
             submitFilters = {
-                viewModel.filterList
-                            },
-
-            )
+                ListMode.Filters
+            },
+            getFilteredList = {viewModel.getFilteredList()}
+        )
     }
 }
 
@@ -60,7 +59,7 @@ fun SearchCountryScreen(
 )
 @Composable
 fun SearchPanePrev() {
-    SearchPane()
+    SearchPane(setSearchMode = {ListMode.Search("")})
 }
 
 @Preview(

@@ -28,10 +28,11 @@ fun MainLayout(
     isContinentClicked: Boolean,
     onTimeZoneReveal: () -> Unit,
     isTimeZoneClicked: Boolean,
-    submitFilters: () -> List<String>,
+    submitFilters: () -> ListMode,
     onFilterValueSelected: (String) -> Unit,
     onReset: () -> Unit,
-    onFilterUnselected: (String) -> Unit
+    onFilterUnselected: (String) -> Unit,
+    getFilteredList: () -> List<CountryInfo>
 ) {
     var peekHeight by remember {
         mutableStateOf(56.dp)
@@ -40,6 +41,10 @@ fun MainLayout(
     var currentBottomSheet: BottomSheetScreen? by remember {
         mutableStateOf(null)
     }
+    var currentListMode: ListMode by remember {
+        mutableStateOf(ListMode.Language)
+    }
+
     val backdropState =
         rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed)
     val closeSheet: () -> Unit = {
@@ -66,7 +71,6 @@ fun MainLayout(
         .map { it.value to it.key }.toMap()
     val key = languageKeyMap[selectedLanguage]!!
 
-    var filterList = emptyList<String>()
     //LOG ALL DISTINCT UTC & CONTINENTS IN THE DATA OBJECTS
 //    val timezones = mutableListOf<String>()
 //    countries.forEach { country ->
@@ -82,7 +86,6 @@ fun MainLayout(
 //    val distinctContinents = continents.distinct()
 //    Log.d("MainLayoutContinent", distinctContinents.sorted().toString())
     //Data above is saved in util file FilterValues
-    Log.d("CheckFilters", filterList.toString())
     BackdropScaffold(
         headerHeight = 0.dp,
         stickyFrontLayer = false,
@@ -95,10 +98,15 @@ fun MainLayout(
                         top = 16.dp
                     )
             ) {
-                SearchPane()
+                SearchPane(setSearchMode = {
+                    currentListMode = it
+                })
                 ConfigPane(
                     language = key.uppercase(Locale.getDefault()),
                     onLangChange = {
+                        if(currentListMode != ListMode.Language){
+                            currentListMode = ListMode.Language
+                        }
                         isLangClicked = true
                         openSheet(
                             BottomSheetScreen.TranslationsScreen(
@@ -129,20 +137,45 @@ fun MainLayout(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     state = scrollState
                 ) {
-                    val groupedCountries = countries.groupBy { it.name.first() }
-                    groupedCountries.forEach { entry ->
-                        item { Text(text = entry.key.toString(), color = Gray900) }
-                        items(entry.value) { item ->
-                            CountryItem(
-                                flagImageUrl = item.flagUrl,
-                                countryName = if (selectedLanguage == translationMapper()["eng"]!!) item.name
-                                else
-                                    if (item.translations?.containsKey(key) == true) item.translations.getValue(
-                                        key
-                                    ) else item.name,
-                                countryCapital = item.capital
-                            ) {
-                                onCountryClicked(item)
+                    when (currentListMode) {
+                        is ListMode.Filters -> {
+                            val filteredCountries = getFilteredList()
+
+                            items(filteredCountries){ item ->
+                                CountryItem(
+                                    flagImageUrl = item.flagUrl,
+                                    countryName = if (selectedLanguage == translationMapper()["eng"]!!) item.name
+                                    else
+                                        if (item.translations?.containsKey(key) == true) item.translations.getValue(
+                                            key
+                                        ) else item.name,
+                                    countryCapital = item.capital
+                                ) {
+                                    onCountryClicked(item)
+                                }
+                            }
+                            Log.d("ListMode", "Filter")
+                        }
+                        is ListMode.Search -> {
+                            Log.d("ListMode", "Search")
+                        }
+                        is ListMode.Language -> {
+                            val groupedCountries = countries.groupBy { it.name.first() }
+                            groupedCountries.forEach { entry ->
+                                item { Text(text = entry.key.toString(), color = Gray900) }
+                                items(entry.value) { item ->
+                                    CountryItem(
+                                        flagImageUrl = item.flagUrl,
+                                        countryName = if (selectedLanguage == translationMapper()["eng"]!!) item.name
+                                        else
+                                            if (item.translations?.containsKey(key) == true) item.translations.getValue(
+                                                key
+                                            ) else item.name,
+                                        countryCapital = item.capital
+                                    ) {
+                                        onCountryClicked(item)
+                                    }
+                                }
                             }
                         }
                     }
@@ -161,12 +194,10 @@ fun MainLayout(
                     isContinentClicked = isContinentClicked,
                     isTimeZoneClicked = isTimeZoneClicked,
                     onRevealTimeZone = onTimeZoneReveal,
-                    submitFilers = {
-                        filterList = submitFilters()
-                                   },
-                    onFilterValueSelected = onFilterValueSelected,
+                    submitFilers = { currentListMode = submitFilters() },
+                    onFilterValueSelected = { onFilterValueSelected(it) },
                     onReset = onReset,
-                    onFilterUnselected = onFilterUnselected
+                    onFilterUnselected = { onFilterUnselected(it) }
                 )
             }
         },
@@ -176,9 +207,8 @@ fun MainLayout(
 }
 
 
-sealed class ListFilters {
-    //TODO(Implement the filters on backLayer Content)
-    class Search(val name: String) : ListFilters()
-    class Continent(val continent: String) : ListFilters()
-    class TimeZone(val timeZone: String) : ListFilters()
+sealed class ListMode {
+    class Search(val name: String) : ListMode()
+    object Filters : ListMode()
+    object Language : ListMode()
 }

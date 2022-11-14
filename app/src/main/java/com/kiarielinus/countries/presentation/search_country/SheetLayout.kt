@@ -23,10 +23,10 @@ fun SheetLayout(
                 isContinentClicked = isContinentClicked,
                 isTimeZoneClicked = isTimeZoneClicked,
                 onRevealTimeZones = onRevealTimeZone,
-                onRevealContinent = onRevealContinent
-                , submitFilters = submitFilers,
-                onFilterUnselected = onFilterUnselected,
-                onFilterValueSelected = onFilterValueSelected,
+                onRevealContinent = onRevealContinent,
+                submitFilters = { submitFilers() },
+                onFilterUnselected = { onFilterUnselected(it) },
+                onFilterValueSelected = { onFilterValueSelected(it) },
                 onReset = onReset
             )
             is BottomSheetScreen.TranslationsScreen -> TranslationsScreen(

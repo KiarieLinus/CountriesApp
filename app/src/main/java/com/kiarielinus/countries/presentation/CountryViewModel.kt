@@ -1,5 +1,6 @@
 package com.kiarielinus.countries.presentation
 
+import android.system.Os.remove
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -35,8 +36,9 @@ class CountryViewModel @Inject constructor(
     private val _isTimeZoneClicked = mutableStateOf(false)
     val isTimeZoneClicked: State<Boolean> = _isTimeZoneClicked
 
-    private val _filterList = mutableListOf<String>()
-    val filterList = _filterList.distinct()
+    private val _filterList = mutableStateOf(mutableListOf<String>())
+    private val _countriesInFilter = mutableStateOf(mutableListOf<CountryInfo>())
+
 
     init {
         getCountries()
@@ -97,10 +99,29 @@ class CountryViewModel @Inject constructor(
     }
 
     fun selectFilter(filter: String) {
-        _filterList.add(filter)
+        _filterList.value.add(filter)
     }
 
     fun unselectFilter(filter: String) {
-        _filterList.remove(filter)
+        _filterList.value.remove(filter)
+    }
+
+    fun getFilteredList(): List<CountryInfo>{
+        val filters = _filterList.value.distinct()
+        val countries = _searchState.value.countries
+        countries.forEach{ country ->
+            country.continent.forEach { continent ->
+                if (filters.contains(continent)){
+                    _countriesInFilter.value.add(country)
+                }
+            }
+            country.timezone.forEach { timeZone ->
+                if(filters.contains(timeZone) && !_countriesInFilter.value.contains(country)){
+                    _countriesInFilter.value.add(country)
+                }
+            }
+        }
+
+        return _countriesInFilter.value.distinct().sortedBy { it.name }
     }
 }
