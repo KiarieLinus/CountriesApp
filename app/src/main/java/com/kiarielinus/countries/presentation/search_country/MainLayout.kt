@@ -55,9 +55,11 @@ fun MainLayout(
             backdropState.conceal()
         }
     }
-
+    var isLangClicked by remember {
+        mutableStateOf(false)
+    }
     peekHeight =
-        if (!isContinentClicked && !isTimeZoneClicked) (screenHeight * 0.9).dp else (screenHeight * 0.3).dp
+        if (!isContinentClicked && !isTimeZoneClicked && !isLangClicked) (screenHeight * 0.9).dp else (screenHeight * 0.3).dp
 
     val translations by remember { mutableStateOf(translationMapper().map { it.value }) }
     val languageKeyMap = translationMapper()
@@ -97,7 +99,7 @@ fun MainLayout(
                 ConfigPane(
                     language = key.uppercase(Locale.getDefault()),
                     onLangChange = {
-                        peekHeight = (screenHeight * 0.22).dp
+                        isLangClicked = true
                         openSheet(
                             BottomSheetScreen.TranslationsScreen(
                                 translations
