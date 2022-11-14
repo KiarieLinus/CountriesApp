@@ -92,7 +92,7 @@ fun MainLayout(
         appBar = {
             Column(
                 modifier = Modifier
-                    .background(MaterialTheme.colors.background)
+//                    .background(MaterialTheme.colors.background)
                     .padding(horizontal = 24.dp)
                     .padding(
                         top = 16.dp
@@ -124,7 +124,7 @@ fun MainLayout(
         backLayerContent = {
             Surface(
                 modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colors.background
+//                color = MaterialTheme.colors.background
             ) {
                 val scrollState = rememberLazyListState()
                 LazyColumn(
@@ -176,7 +176,9 @@ fun MainLayout(
                         is ListMode.Language -> {
                             val groupedCountries = countries.groupBy { it.name.first() }
                             groupedCountries.forEach { entry ->
-                                item { Text(text = entry.key.toString(), color = Gray900) }
+                                item { Text(text = entry.key.toString(),
+//                                    color = Gray900
+                                ) }
                                 items(entry.value) { item ->
                                     CountryItem(
                                         flagImageUrl = item.flagUrl,

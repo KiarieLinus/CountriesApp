@@ -20,10 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kiarielinus.countries.R
-import com.kiarielinus.countries.presentation.ui.theme.Axiforma
-import com.kiarielinus.countries.presentation.ui.theme.Gray500
-import com.kiarielinus.countries.presentation.ui.theme.Gray900
-import com.kiarielinus.countries.presentation.ui.theme.White
+import com.kiarielinus.countries.presentation.ui.theme.*
 import com.kiarielinus.countries.util.getContinents
 import com.kiarielinus.countries.util.getTimeZones
 
@@ -41,7 +38,6 @@ fun FiltersScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(White)
     ) {
         SheetTitle(header = "Filter")
         FilterHeader(
@@ -50,7 +46,7 @@ fun FiltersScreen(
         ) {
             onRevealContinent()
         }
-        if (isContinentClicked ) {
+        if (isContinentClicked) {
             LazyColumn(modifier = Modifier.height(300.dp)) {
                 item { Spacer(modifier = Modifier.height(16.dp)) }
                 items(getContinents()) { continent ->
@@ -68,7 +64,7 @@ fun FiltersScreen(
                             fontWeight = FontWeight.W400,
                             fontSize = 16.sp,
                             lineHeight = 24.sp,
-                            color = Gray900
+//                            color = Gray900
                         )
                         val checkedState = remember { mutableStateOf(false) }
                         Checkbox(
@@ -78,14 +74,16 @@ fun FiltersScreen(
                                 checkedState.value = it
                                 onFilterValueSelected(continent)
                             })
-                        if (checkedState.value) onFilterValueSelected(continent) else onFilterUnselected(continent)
+                        if (checkedState.value) onFilterValueSelected(continent) else onFilterUnselected(
+                            continent
+                        )
                     }
                 }
             }
         }
         FilterHeader(
             title = "Time Zone",
-            imageVector = if (isTimeZoneClicked ) Icons.Default.ExpandLess else Icons.Default.ExpandMore
+            imageVector = if (isTimeZoneClicked) Icons.Default.ExpandLess else Icons.Default.ExpandMore
         ) {
             onRevealTimeZones()
         }
@@ -107,7 +105,7 @@ fun FiltersScreen(
                             fontWeight = FontWeight.W400,
                             fontSize = 16.sp,
                             lineHeight = 24.sp,
-                            color = Gray900
+//                            color = Gray900
                         )
                         val checkedState = remember { mutableStateOf(false) }
                         Checkbox(
@@ -116,7 +114,9 @@ fun FiltersScreen(
                             onCheckedChange = {
                                 checkedState.value = it
                             })
-                        if (checkedState.value) onFilterValueSelected(timeZone) else onFilterUnselected(timeZone)
+                        if (checkedState.value) onFilterValueSelected(timeZone) else onFilterUnselected(
+                            timeZone
+                        )
                     }
                 }
             }
@@ -124,7 +124,8 @@ fun FiltersScreen(
         }
         if (isContinentClicked || isTimeZoneClicked) FilterButtons(
             submitFilters = { submitFilters() },
-            resetCheckedButtons = onReset)
+            resetCheckedButtons = onReset
+        )
     }
 }
 
@@ -137,7 +138,6 @@ fun TranslationsScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(White)
     ) {
         SheetTitle(header = "Languages")
         LazyColumn {
@@ -157,7 +157,7 @@ fun TranslationsScreen(
                         fontWeight = FontWeight.W400,
                         fontSize = 16.sp,
                         lineHeight = 24.sp,
-                        color = Gray900
+//                        color = Gray900
                     )
                     RadioButton(
                         modifier = Modifier.size(18.dp),
@@ -182,7 +182,7 @@ fun SheetTitle(
             fontWeight = FontWeight.W700,
             fontSize = 20.sp,
             lineHeight = 32.9.sp,
-            color = Gray900,
+//            color = Gray900,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
@@ -210,7 +210,7 @@ fun FilterHeader(
             fontWeight = FontWeight.W400,
             fontSize = 16.sp,
             lineHeight = 24.sp,
-            color = Gray900
+//            color = Gray900
         )
         Icon(
             imageVector = imageVector,
@@ -242,7 +242,7 @@ fun FilterButtons(
                 fontFamily = Axiforma,
                 fontWeight = FontWeight.W400,
                 fontSize = 16.sp,
-                color = Gray900
+//                color = Gray900
             )
         }
 
@@ -251,7 +251,8 @@ fun FilterButtons(
                 .fillMaxWidth()
                 .padding(start = 24.dp)
                 .weight(2f),
-            onClick = { submitFilters() }
+            onClick = { submitFilters() },
+            colors =  ButtonDefaults.buttonColors(backgroundColor = Orange)
         ) {
             Text(
                 stringResource(R.string.submit_button),

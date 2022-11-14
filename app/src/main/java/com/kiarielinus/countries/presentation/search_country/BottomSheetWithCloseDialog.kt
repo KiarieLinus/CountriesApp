@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 fun BottomSheetWithCloseDialog(
     onClosePressed: () -> Unit,
     modifier: Modifier = Modifier,
-    closeButtonColor: Color = Color.Gray,
+//    closeButtonColor: Color = Color.Gray,
     content: @Composable() () -> Unit
 ) {
     Box(modifier.fillMaxWidth()) {
@@ -32,7 +32,7 @@ fun BottomSheetWithCloseDialog(
                 .size(24.dp)
 
         ) {
-            Icon(Icons.Filled.DisabledByDefault, tint = closeButtonColor, contentDescription = null)
+            Icon(Icons.Filled.DisabledByDefault, contentDescription = null)
         }
 
     }

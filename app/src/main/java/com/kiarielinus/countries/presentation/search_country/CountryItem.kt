@@ -52,7 +52,7 @@ fun CountryItem(
                 letterSpacing = (-0.3).sp,
                 textAlign = TextAlign.Start,
                 fontWeight = FontWeight.W400,
-                color = Gray900
+//                color = Gray900
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
@@ -63,7 +63,7 @@ fun CountryItem(
                 letterSpacing = (-0.3).sp,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.W400,
-                color = Gray500
+//                color = Gray500
             )
         }
     }

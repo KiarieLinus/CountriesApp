@@ -25,7 +25,7 @@ fun SearchCountryScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
+//        color = MaterialTheme.colors.background
     ) {
         val screenHeight = LocalConfiguration.current.screenHeightDp
         MainLayout(

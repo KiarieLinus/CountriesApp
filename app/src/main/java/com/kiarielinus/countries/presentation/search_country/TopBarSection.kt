@@ -1,6 +1,7 @@
 package com.kiarielinus.countries.presentation.search_country
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,10 +13,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FilterAlt
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -48,10 +46,12 @@ fun SearchPane(
                     .weight(9f)
             ) {
                 Text(text = "Explore", fontFamily = ElsieSwashCaps, fontSize = 24.sp)
-                Text(text = ".", fontFamily = ElsieSwashCaps, fontSize = 24.sp, color = Orange)
+                Text(text = ".", fontFamily = ElsieSwashCaps, fontSize = 24.sp,
+                    color = Orange
+                )
             }
             Icon(
-                imageVector = Icons.Outlined.LightMode,
+                imageVector = if(isSystemInDarkTheme())Icons.Outlined.DarkMode else Icons.Outlined.LightMode,
                 contentDescription = "",
                 modifier = Modifier.weight(1f)
             )
@@ -95,13 +95,15 @@ fun SearchPane(
                 Text(
                     text = "Search Country",
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.weight(9f).align(CenterHorizontally),
+                    modifier = Modifier
+                        .weight(9f)
+                        .align(CenterHorizontally),
                     fontSize = 16.sp,
                     fontFamily = Axiforma,
                     fontWeight = FontWeight.W300,
                     letterSpacing = (-0.3).sp,
                     lineHeight = 24.67.sp,
-                    color = Gray500
+//                    color = Gray500
                 )
             }
         )
