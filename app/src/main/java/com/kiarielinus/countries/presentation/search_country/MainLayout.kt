@@ -23,7 +23,15 @@ fun MainLayout(
     screenHeight: Int,
     onCountryClicked: (country: CountryInfo) -> Unit,
     selectedLanguage: String,
-    onLangSelected: (String) -> Unit
+    onLangSelected: (String) -> Unit,
+    onContinentReveal: () -> Unit,
+    isContinentClicked: Boolean,
+    onTimeZoneReveal: () -> Unit,
+    isTimeZoneClicked: Boolean,
+    submitFilters: () -> List<String>,
+    onFilterValueSelected: (String) -> Unit,
+    onReset: () -> Unit,
+    onFilterUnselected: (String) -> Unit
 ) {
     var peekHeight by remember {
         mutableStateOf(56.dp)
@@ -48,12 +56,15 @@ fun MainLayout(
         }
     }
 
+    peekHeight =
+        if (!isContinentClicked && !isTimeZoneClicked) (screenHeight * 0.9).dp else (screenHeight * 0.3).dp
+
     val translations by remember { mutableStateOf(translationMapper().map { it.value }) }
     val languageKeyMap = translationMapper()
         .map { it.value to it.key }.toMap()
     val key = languageKeyMap[selectedLanguage]!!
 
-
+    var filterList = emptyList<String>()
     //LOG ALL DISTINCT UTC & CONTINENTS IN THE DATA OBJECTS
 //    val timezones = mutableListOf<String>()
 //    countries.forEach { country ->
@@ -68,7 +79,8 @@ fun MainLayout(
 //    }
 //    val distinctContinents = continents.distinct()
 //    Log.d("MainLayoutContinent", distinctContinents.sorted().toString())
-
+    //Data above is saved in util file FilterValues
+    Log.d("CheckFilters", filterList.toString())
     BackdropScaffold(
         headerHeight = 0.dp,
         stickyFrontLayer = false,
@@ -142,11 +154,29 @@ fun MainLayout(
                     currentSheet,
                     closeSheet,
                     selectedLanguage,
-                    onLangSelected
+                    onLangSelected,
+                    onRevealContinent = onContinentReveal,
+                    isContinentClicked = isContinentClicked,
+                    isTimeZoneClicked = isTimeZoneClicked,
+                    onRevealTimeZone = onTimeZoneReveal,
+                    submitFilers = {
+                        filterList = submitFilters()
+                                   },
+                    onFilterValueSelected = onFilterValueSelected,
+                    onReset = onReset,
+                    onFilterUnselected = onFilterUnselected
                 )
             }
         },
         peekHeight = peekHeight,
         scaffoldState = backdropState
     )
+}
+
+
+sealed class ListFilters {
+    //TODO(Implement the filters on backLayer Content)
+    class Search(val name: String) : ListFilters()
+    class Continent(val continent: String) : ListFilters()
+    class TimeZone(val timeZone: String) : ListFilters()
 }

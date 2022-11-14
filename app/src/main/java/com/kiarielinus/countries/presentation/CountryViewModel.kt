@@ -29,6 +29,15 @@ class CountryViewModel @Inject constructor(
     private val _selectedLanguage = mutableStateOf(translationMapper()["eng"]!!)
     val selectedLanguage: State<String> = _selectedLanguage
 
+    private val _isContinentClicked = mutableStateOf(false)
+    val isContinentClicked: State<Boolean> = _isContinentClicked
+
+    private val _isTimeZoneClicked = mutableStateOf(false)
+    val isTimeZoneClicked: State<Boolean> = _isTimeZoneClicked
+
+    private val _filterList = mutableListOf<String>()
+    val filterList = _filterList.distinct()
+
     init {
         getCountries()
     }
@@ -72,5 +81,26 @@ class CountryViewModel @Inject constructor(
 
     fun onLanguageSelected(translation: String) {
         _selectedLanguage.value = translation
+    }
+    fun updateIsContinentClicked(){
+        _isContinentClicked.value = !_isContinentClicked.value
+        if (_isTimeZoneClicked.value){
+            _isTimeZoneClicked.value = false
+        }
+    }
+
+    fun updateIsTimeZoneClicked() {
+        _isTimeZoneClicked.value = !_isTimeZoneClicked.value
+        if(_isContinentClicked.value){
+            _isContinentClicked.value = false
+        }
+    }
+
+    fun selectFilter(filter: String) {
+        _filterList.add(filter)
+    }
+
+    fun unselectFilter(filter: String) {
+        _filterList.remove(filter)
     }
 }

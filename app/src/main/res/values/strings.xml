@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Countries</string>
+    <string name="reset_button">Reset</string>
+    <string name="submit_button">Show results</string>
 </resources>

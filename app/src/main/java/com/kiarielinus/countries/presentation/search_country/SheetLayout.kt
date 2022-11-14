@@ -1,25 +1,37 @@
 package com.kiarielinus.countries.presentation.search_country
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-
 
 @Composable
 fun SheetLayout(
     currentScreen: BottomSheetScreen,
     closeSheet: () -> Unit,
     selectedValue: String,
-    onLangSelected: (String) -> Unit
+    onLangSelected: (String) -> Unit,
+    onRevealContinent: () -> Unit,
+    isContinentClicked: Boolean,
+    isTimeZoneClicked: Boolean,
+    onRevealTimeZone: () -> Unit,
+    submitFilers: () -> Unit,
+    onFilterUnselected: (String) -> Unit,
+    onFilterValueSelected: (String) -> Unit,
+    onReset: () -> Unit
 ) {
     BottomSheetWithCloseDialog(onClosePressed = closeSheet) {
         when (currentScreen) {
             is BottomSheetScreen.FiltersScreen -> FiltersScreen(
-
+                isContinentClicked = isContinentClicked,
+                isTimeZoneClicked = isTimeZoneClicked,
+                onRevealTimeZones = onRevealTimeZone,
+                onRevealContinent = onRevealContinent
+                , submitFilters = submitFilers,
+                onFilterUnselected = onFilterUnselected,
+                onFilterValueSelected = onFilterValueSelected,
+                onReset = onReset
             )
             is BottomSheetScreen.TranslationsScreen -> TranslationsScreen(
                 translations = currentScreen.translations,
-                selectedValue = selectedValue
+                selectedTranslation = selectedValue
             ) { onLangSelected(it) }
         }
     }
