@@ -15,7 +15,7 @@ You can click [Appetize.io](https://appetize.io/app/bhw6ha3tbff6eyyxcrnz4unzha?d
 
 ## Design & Features
 
-The app has two screens namely the SearchCountryScreen which is the first screen that offers a list of grouped countries, clicking on a country item navigates to the  CountryDetailsScreen that shows details concerning selected country
+The app has two screens namely the SearchCountryScreen which is the first screen that offers a list of grouped countries, clicking on a country item navigates to the  CountryDetailsScreen that shows details concerning selected country. The translations of the country names can be accessed by clicking the "world" button and choosing a language from the bottom sheet.
 
 The design is from [Design](https://www.figma.com/file/v9AXj4VZNnx26fTthrPbhX/Explore)
 
@@ -24,6 +24,7 @@ The design is from [Design](https://www.figma.com/file/v9AXj4VZNnx26fTthrPbhX/Ex
 - Theming: Improve on the theming to make the mode change cleaner
 - List Filtering: Add the functions to filter the list by continent and time zone
 - Search Feature: Add function for the country list search feature
+- Map: Add a map of the country in the detail screen
 
 ## Challenges
 
