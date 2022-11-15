@@ -31,6 +31,5 @@ fun BottomSheetWithCloseDialog(
         ) {
             Icon(Icons.Filled.DisabledByDefault, contentDescription = null)
         }
-
     }
 }

@@ -183,7 +183,9 @@ fun MainLayout(
                     submitFilers = { currentListMode = submitFilters() },
                     onFilterUnselected = { onFilterUnselected(it) },
                     onFilterValueSelected = { onFilterValueSelected(it) },
-                    onReset = onReset,
+                    onReset = {
+                        currentListMode = it
+                        onReset()},
                     selectedFilters = selectedFilters
                 )
             }

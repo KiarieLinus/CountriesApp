@@ -15,7 +15,7 @@ fun SheetLayout(
     submitFilers: () -> Unit,
     onFilterUnselected: (String) -> Unit,
     onFilterValueSelected: (String) -> Unit,
-    onReset: () -> Unit,
+    onReset: (ListMode) -> Unit,
     selectedFilters: () -> List<String>
 ) {
     BottomSheetWithCloseDialog(onClosePressed = closeSheet) {
@@ -28,7 +28,10 @@ fun SheetLayout(
                 submitFilters = { submitFilers() },
                 onFilterUnselected = { onFilterUnselected(it) },
                 onFilterValueSelected = { onFilterValueSelected(it) },
-                onReset = onReset,
+                onReset = {
+                    closeSheet()
+                    onReset(it)
+                          },
                 selectedFilters = selectedFilters
             )
             is BottomSheetScreen.TranslationsScreen -> TranslationsScreen(

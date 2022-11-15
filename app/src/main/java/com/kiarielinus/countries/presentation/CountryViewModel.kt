@@ -43,7 +43,6 @@ class CountryViewModel @Inject constructor(
         getCountries()
     }
 
-    private var job: Job? = null
     private fun getCountries() {
         viewModelScope.launch {
             when (val resource = useCases.getCountriesList()) {
@@ -137,6 +136,6 @@ class CountryViewModel @Inject constructor(
     }
 
     fun clearFilters() {
-        _filterList.value.clear()
+        _filterList.value = mutableListOf()
     }
 }

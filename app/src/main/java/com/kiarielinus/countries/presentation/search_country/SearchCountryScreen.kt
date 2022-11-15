@@ -50,7 +50,6 @@ fun SearchCountryScreen(
             selectedFilters = {viewModel.getSelectedFilters()},
             onReset = {
                 viewModel.clearFilters()
-                ListMode.Language
             }
         )
     }

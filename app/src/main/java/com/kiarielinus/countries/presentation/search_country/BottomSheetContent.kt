@@ -34,7 +34,7 @@ fun FiltersScreen(
     onRevealContinent: () -> Unit,
     onRevealTimeZones: () -> Unit,
     submitFilters: () -> Unit,
-    onReset: () -> Unit,
+    onReset: (ListMode) -> Unit,
     onFilterValueSelected: (String) -> Unit,
     onFilterUnselected: (String) -> Unit,
     selectedFilters: () -> List<String>
@@ -76,11 +76,10 @@ fun FiltersScreen(
                             checked = checkedState.value,
                             onCheckedChange = {
                                 checkedState.value = it
-                                onFilterValueSelected(continent)
+                                if (checkedState.value) onFilterValueSelected(continent) else onFilterUnselected(
+                                    continent
+                                )
                             })
-                        if (checkedState.value) onFilterValueSelected(continent) else onFilterUnselected(
-                            continent
-                        )
                     }
                 }
             }
@@ -117,10 +116,9 @@ fun FiltersScreen(
                             checked = checkedState.value,
                             onCheckedChange = {
                                 checkedState.value = it
+                                if (checkedState.value) onFilterValueSelected(timeZone) else onFilterUnselected(
+                                    timeZone)
                             })
-                        if (checkedState.value) onFilterValueSelected(timeZone) else onFilterUnselected(
-                            timeZone
-                        )
                     }
                 }
             }
@@ -128,7 +126,8 @@ fun FiltersScreen(
         }
         if (isContinentClicked || isTimeZoneClicked) FilterButtons(
             submitFilters = { submitFilters() },
-            resetCheckedButtons = onReset
+            resetCheckedButtons = {
+                onReset(ListMode.Language)}
         )
     }
 }
