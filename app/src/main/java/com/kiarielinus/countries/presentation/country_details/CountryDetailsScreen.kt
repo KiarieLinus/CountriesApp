@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.kiarielinus.countries.presentation.CountryViewModel
 import com.kiarielinus.countries.presentation.ui.theme.Axiforma
@@ -98,27 +99,27 @@ fun FlagBanner(
     countryName: String
 ) {
     val pagerState = rememberPagerState()
-    HorizontalPager(
-        count = 2,
-        state = pagerState
-    ) { page ->
-        when (page) {
-            0 -> {
-                AsyncImage(
-                    model = flagUrl,
-                    contentDescription = countryName,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp)
-                        .height(200.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    contentScale = ContentScale.FillBounds
-                )
-            }
-            1 -> {
-                coatOfArmsUrl?.let {
+    Box {
+        HorizontalPager(
+            count = if (coatOfArmsUrl!!.isBlank()) 1 else 2,
+            state = pagerState
+        ) { page ->
+            when (page) {
+                0 -> {
                     AsyncImage(
-                        model = it,
+                        model = flagUrl,
+                        contentDescription = countryName,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp)
+                            .height(200.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
+                1 -> {
+                    AsyncImage(
+                        model = coatOfArmsUrl,
                         contentDescription = countryName,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -127,25 +128,14 @@ fun FlagBanner(
                             .clip(RoundedCornerShape(4.dp)),
                         contentScale = ContentScale.FillBounds
                     )
-                } ?: Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp)
-                        .height(200.dp)
-                        .background(Gray900, RoundedCornerShape(8.dp))
-                        .clip(RoundedCornerShape(4.dp))
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Flag,
-                        contentDescription = "No Coat of Arms",
-                        modifier = Modifier
-                            .size(120.dp)
-                            .align(Alignment.Center),
-                        tint = Color(0xFF000000)
-                    )
                 }
             }
         }
+
+        HorizontalPagerIndicator(
+            pagerState = pagerState,
+            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 16.dp),
+        )
     }
 }
 
