@@ -42,7 +42,6 @@ fun FiltersScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Min)
     ) {
         SheetTitle(header = "Filter")
         FilterHeader(

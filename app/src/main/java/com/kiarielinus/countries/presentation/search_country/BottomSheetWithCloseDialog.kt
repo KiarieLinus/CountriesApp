@@ -18,7 +18,7 @@ fun BottomSheetWithCloseDialog(
 //    closeButtonColor: Color = Color.Gray,
     content: @Composable() () -> Unit
 ) {
-    Box(modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
+    Box(modifier.fillMaxWidth()) {
         content()
 
         IconButton(
