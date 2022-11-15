@@ -6,7 +6,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FilterAlt
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.kiarielinus.countries.presentation.CountryViewModel
@@ -22,14 +21,13 @@ fun SearchCountryScreen(
     val countries = state.countries
     val selectedLanguage = viewModel.selectedLanguage.value
 
+
+
     Surface(
         modifier = Modifier.fillMaxSize(),
-//        color = MaterialTheme.colors.background
     ) {
-        val screenHeight = LocalConfiguration.current.screenHeightDp
         MainLayout(
             countries = countries,
-            screenHeight = screenHeight,
             {
                 viewModel.countryClicked(it)
                 navController.navigate(Screen.Detail.route)
@@ -50,7 +48,10 @@ fun SearchCountryScreen(
             getFilteredList = { viewModel.getFilteredList() },
             { viewModel.getSearched(it) },
             selectedFilters = {viewModel.getSelectedFilters()},
-            onReset = {viewModel.clearFilters()}
+            onReset = {
+                viewModel.clearFilters()
+                ListMode.Language
+            }
         )
     }
 }

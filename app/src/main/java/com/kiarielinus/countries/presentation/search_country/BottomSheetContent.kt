@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.kiarielinus.countries.R
 import com.kiarielinus.countries.presentation.ui.theme.Axiforma
 import com.kiarielinus.countries.presentation.ui.theme.Gray500
+import com.kiarielinus.countries.presentation.ui.theme.Gray900
 import com.kiarielinus.countries.presentation.ui.theme.Orange
 import com.kiarielinus.countries.util.getContinents
 import com.kiarielinus.countries.util.getTimeZones
@@ -41,6 +42,7 @@ fun FiltersScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .height(IntrinsicSize.Min)
     ) {
         SheetTitle(header = "Filter")
         FilterHeader(
@@ -245,7 +247,7 @@ fun FilterButtons(
                 fontFamily = Axiforma,
                 fontWeight = FontWeight.W400,
                 fontSize = 16.sp,
-//                color = Gray900
+                color = Gray900
             )
         }
 

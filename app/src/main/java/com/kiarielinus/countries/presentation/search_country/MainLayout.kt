@@ -18,7 +18,6 @@ import java.util.*
 @Composable
 fun MainLayout(
     countries: List<CountryInfo>,
-    screenHeight: Int,
     onCountryClicked: (country: CountryInfo) -> Unit,
     selectedLanguage: String,
     onLangSelected: (String) -> Unit,
@@ -34,9 +33,6 @@ fun MainLayout(
     selectedFilters: () -> List<String>,
     onReset: () -> Unit
 ) {
-    var peekHeight by remember {
-        mutableStateOf(56.dp)
-    }
     val scope = rememberCoroutineScope()
     var currentBottomSheet: BottomSheetScreen? by remember {
         mutableStateOf(null)
@@ -48,7 +44,6 @@ fun MainLayout(
     val backdropState =
         rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed)
     val closeSheet: () -> Unit = {
-        peekHeight = 0.dp
         currentBottomSheet = null
         scope.launch {
             backdropState.reveal()
@@ -60,11 +55,10 @@ fun MainLayout(
             backdropState.conceal()
         }
     }
-    var isLangClicked by remember {
-        mutableStateOf(false)
+
+    var currentCountries by remember {
+        mutableStateOf(countries)
     }
-    peekHeight =
-        if (!isContinentClicked && !isTimeZoneClicked && !isLangClicked) (screenHeight * 0.9).dp else (screenHeight * 0.3).dp
 
     val translations by remember { mutableStateOf(translationMapper().map { it.value }) }
     val languageKeyMap = translationMapper()
@@ -92,7 +86,6 @@ fun MainLayout(
         appBar = {
             Column(
                 modifier = Modifier
-//                    .background(MaterialTheme.colors.background)
                     .padding(horizontal = 24.dp)
                     .padding(
                         top = 16.dp
@@ -104,7 +97,6 @@ fun MainLayout(
                 ConfigPane(
                     language = key.uppercase(Locale.getDefault()),
                     onLangChange = {
-                        isLangClicked = true
                         openSheet(
                             BottomSheetScreen.TranslationsScreen(
                                 translations
@@ -123,8 +115,7 @@ fun MainLayout(
         },
         backLayerContent = {
             Surface(
-                modifier = Modifier.fillMaxSize(),
-//                color = MaterialTheme.colors.background
+                modifier = Modifier.fillMaxSize()
             ) {
                 val scrollState = rememberLazyListState()
                 LazyColumn(
@@ -136,21 +127,8 @@ fun MainLayout(
                 ) {
                     when (currentListMode) {
                         is ListMode.Filters -> {
-                            val filteredCountries = getFilteredList()
+                            currentCountries = getFilteredList()
 
-                            items(filteredCountries) { item ->
-                                CountryItem(
-                                    flagImageUrl = item.flagUrl,
-                                    countryName = if (selectedLanguage == translationMapper()["eng"]!!) item.name
-                                    else
-                                        if (item.translations?.containsKey(key) == true) item.translations.getValue(
-                                            key
-                                        ) else item.name,
-                                    countryCapital = item.capital
-                                ) {
-                                    onCountryClicked(item)
-                                }
-                            }
                             Log.d("ListMode", "Filter")
                         }
                         is ListMode.Search -> {
@@ -158,43 +136,35 @@ fun MainLayout(
                             if (countryName.isBlank()) {
                                 ListMode.Language
                             }
-                            items(getSearchedList(countryName)) { item ->
-                                CountryItem(
-                                    flagImageUrl = item.flagUrl,
-                                    countryName = if (selectedLanguage == translationMapper()["eng"]!!) item.name
-                                    else
-                                        if (item.translations?.containsKey(key) == true) item.translations.getValue(
-                                            key
-                                        ) else item.name,
-                                    countryCapital = item.capital
-                                ) {
-                                    onCountryClicked(item)
-                                }
-                            }
+                            currentCountries = getSearchedList(countryName)
+
                             Log.d("ListMode", "Search")
                         }
                         is ListMode.Language -> {
-                            val groupedCountries = countries.groupBy { it.name.first() }
-                            groupedCountries.forEach { entry ->
-                                item { Text(text = entry.key.toString(),
-//                                    color = Gray900
-                                ) }
-                                items(entry.value) { item ->
-                                    CountryItem(
-                                        flagImageUrl = item.flagUrl,
-                                        countryName = if (selectedLanguage == translationMapper()["eng"]!!) item.name
-                                        else
-                                            if (item.translations?.containsKey(key) == true) item.translations.getValue(
-                                                key
-                                            ) else item.name,
-                                        countryCapital = item.capital
-                                    ) {
-                                        onCountryClicked(item)
-                                    }
-                                }
+                            currentCountries = countries
+
+                        }
+                    }
+
+
+                    val groupedCountries = currentCountries.groupBy { it.name.first() }
+                    groupedCountries.forEach { entry ->
+                        item { Text(text = entry.key.toString()) }
+                        items(entry.value) { item ->
+                            CountryItem(
+                                flagImageUrl = item.flagUrl,
+                                countryName = if (selectedLanguage == translationMapper()["eng"]!!) item.name
+                                else
+                                    if (item.translations?.containsKey(key) == true) item.translations.getValue(
+                                        key
+                                    ) else item.name,
+                                countryCapital = item.capital
+                            ) {
+                                onCountryClicked(item)
                             }
                         }
                     }
+
                     item { Spacer(modifier = Modifier.height(24.dp)) }
                 }
             }
@@ -213,15 +183,12 @@ fun MainLayout(
                     submitFilers = { currentListMode = submitFilters() },
                     onFilterUnselected = { onFilterUnselected(it) },
                     onFilterValueSelected = { onFilterValueSelected(it) },
-                    onReset = {
-                        onReset()
-                        ListMode.Language
-                              },
+                    onReset = onReset,
                     selectedFilters = selectedFilters
                 )
             }
         },
-        scaffoldState = backdropState
+        scaffoldState = backdropState,
     )
 }
 

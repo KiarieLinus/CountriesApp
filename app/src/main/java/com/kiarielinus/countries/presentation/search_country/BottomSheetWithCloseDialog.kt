@@ -1,9 +1,6 @@
 package com.kiarielinus.countries.presentation.search_country
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
@@ -21,7 +18,7 @@ fun BottomSheetWithCloseDialog(
 //    closeButtonColor: Color = Color.Gray,
     content: @Composable() () -> Unit
 ) {
-    Box(modifier.fillMaxWidth()) {
+    Box(modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
         content()
 
         IconButton(

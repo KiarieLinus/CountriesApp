@@ -1,6 +1,5 @@
 package com.kiarielinus.countries.presentation
 
-import android.system.Os.remove
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -60,7 +59,7 @@ class CountryViewModel @Inject constructor(
                 is Resource.Success -> {
                     resource.data?.let { list ->
                         _searchState.value = _searchState.value.copy(
-                            countries = list.sortedBy{it.name},
+                            countries = list.sortedBy { it.name },
                             isLoading = false,
                             error = ""
                         )
@@ -84,16 +83,17 @@ class CountryViewModel @Inject constructor(
     fun onLanguageSelected(translation: String) {
         _selectedLanguage.value = translation
     }
-    fun updateIsContinentClicked(){
+
+    fun updateIsContinentClicked() {
         _isContinentClicked.value = !_isContinentClicked.value
-        if (_isTimeZoneClicked.value){
+        if (_isTimeZoneClicked.value) {
             _isTimeZoneClicked.value = false
         }
     }
 
     fun updateIsTimeZoneClicked() {
         _isTimeZoneClicked.value = !_isTimeZoneClicked.value
-        if(_isContinentClicked.value){
+        if (_isContinentClicked.value) {
             _isContinentClicked.value = false
         }
     }
@@ -106,32 +106,34 @@ class CountryViewModel @Inject constructor(
         _filterList.value.remove(filter)
     }
 
-    fun getFilteredList(): List<CountryInfo>{
+    fun getFilteredList(): List<CountryInfo> {
         val filters = _filterList.value.distinct()
         val countries = _searchState.value.countries
-        countries.forEach{ country ->
-            country.continent.forEach { continent ->
-                if (filters.contains(continent)){
-                    _countriesInFilter.value.add(country)
+        countries.forEach { country ->
+            if (
+                country.continent.any { continent ->
+                    filters.any {
+                        continent == it
+                    }
+                } && country.timezone.any { timeZone ->
+                    filters.any {
+                        timeZone == it
+                    }
                 }
-            }
-            country.timezone.forEach { timeZone ->
-                if(filters.contains(timeZone) && !_countriesInFilter.value.contains(country)){
-                    _countriesInFilter.value.add(country)
-                }
+            ) {
+                _countriesInFilter.value.add(country)
             }
         }
-
         return _countriesInFilter.value.distinct().sortedBy { it.name }
     }
 
-    fun getSearched(query: String): List<CountryInfo>{
+    fun getSearched(query: String): List<CountryInfo> {
         val countries = _searchState.value.countries
-        return countries.filter { it.name.contains(query,ignoreCase = true) }
+        return countries.filter { it.name.contains(query, ignoreCase = true) }
     }
 
-    fun getSelectedFilters():List<String> {
-        return  _filterList.value.distinct()
+    fun getSelectedFilters(): List<String> {
+        return _filterList.value.distinct()
     }
 
     fun clearFilters() {
