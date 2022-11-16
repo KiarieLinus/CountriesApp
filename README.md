@@ -14,7 +14,8 @@ You can click [Appetize.io](https://appetize.io/app/bhw6ha3tbff6eyyxcrnz4unzha?d
 - Jetpack Compose : used for the ui and state management
 - Dagger-Hilt : a library for  dependency injection in Android apps that works seamlessly with Compose.
 - Accompanist: Used as a paging library for horizontal paging of composable
-- Retrofitt: 
+- Retrofit: For interaction with the REST API
+- Gson: To convert JSON to DTO
 
 ## Design & Features
 
