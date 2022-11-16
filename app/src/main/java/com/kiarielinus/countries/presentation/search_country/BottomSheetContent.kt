@@ -45,46 +45,6 @@ fun FiltersScreen(
     ) {
         SheetTitle(header = "Filter")
         FilterHeader(
-            title = "Continent",
-            imageVector = if (isContinentClicked) Icons.Default.ExpandLess else Icons.Default.ExpandMore
-        ) {
-            onRevealContinent()
-        }
-        if (isContinentClicked) {
-            LazyColumn(modifier = Modifier.height(300.dp)) {
-                item { Spacer(modifier = Modifier.height(16.dp)) }
-                items(getContinents()) { continent ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 24.dp)
-                            .padding(bottom = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = continent,
-                            fontFamily = Axiforma,
-                            fontWeight = FontWeight.W400,
-                            fontSize = 16.sp,
-                            lineHeight = 24.sp,
-//                            color = Gray900
-                        )
-                        val checkedState = remember { mutableStateOf(selectedFilters().contains(continent)) }
-                        Checkbox(
-                            modifier = Modifier.size(18.dp),
-                            checked = checkedState.value,
-                            onCheckedChange = {
-                                checkedState.value = it
-                                if (checkedState.value) onFilterValueSelected(continent) else onFilterUnselected(
-                                    continent
-                                )
-                            })
-                    }
-                }
-            }
-        }
-        FilterHeader(
             title = "Time Zone",
             imageVector = if (isTimeZoneClicked) Icons.Default.ExpandLess else Icons.Default.ExpandMore
         ) {
@@ -124,7 +84,47 @@ fun FiltersScreen(
             }
 
         }
-        if (isContinentClicked || isTimeZoneClicked) FilterButtons(
+        FilterHeader(
+            title = "Continent",
+            imageVector = if (isContinentClicked) Icons.Default.ExpandLess else Icons.Default.ExpandMore
+        ) {
+            onRevealContinent()
+        }
+        if (isContinentClicked) {
+            LazyColumn(modifier = Modifier.height(300.dp)) {
+                item { Spacer(modifier = Modifier.height(16.dp)) }
+                items(getContinents()) { continent ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp)
+                            .padding(bottom = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = continent,
+                            fontFamily = Axiforma,
+                            fontWeight = FontWeight.W400,
+                            fontSize = 16.sp,
+                            lineHeight = 24.sp,
+//                            color = Gray900
+                        )
+                        val checkedState = remember { mutableStateOf(selectedFilters().contains(continent)) }
+                        Checkbox(
+                            modifier = Modifier.size(18.dp),
+                            checked = checkedState.value,
+                            onCheckedChange = {
+                                checkedState.value = it
+                                if (checkedState.value) onFilterValueSelected(continent) else onFilterUnselected(
+                                    continent
+                                )
+                            })
+                    }
+                }
+            }
+        }
+        if (isContinentClicked) FilterButtons(
             submitFilters = { submitFilters() },
             resetCheckedButtons = {
                 onReset(ListMode.Language)}
