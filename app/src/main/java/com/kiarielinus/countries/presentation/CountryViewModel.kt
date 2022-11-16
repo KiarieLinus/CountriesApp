@@ -9,6 +9,8 @@ import com.kiarielinus.countries.domain.use_cases.UseCases
 import com.kiarielinus.countries.presentation.country_details.DetailsState
 import com.kiarielinus.countries.presentation.search_country.SearchState
 import com.kiarielinus.countries.util.Resource
+import com.kiarielinus.countries.util.getContinents
+import com.kiarielinus.countries.util.getTimeZones
 import com.kiarielinus.countries.util.translationMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -38,6 +40,11 @@ class CountryViewModel @Inject constructor(
     private val _filterList = mutableStateOf(mutableListOf<String>())
     private val _countriesInFilter = mutableStateOf(mutableListOf<CountryInfo>())
 
+    private val _noTimeZone = mutableStateOf(false)
+    val noTimeZone: State<Boolean> = _noTimeZone
+
+    private val _noContinent = mutableStateOf(false)
+    val noContinent: State<Boolean> = _noContinent
 
     init {
         getCountries()
@@ -99,6 +106,12 @@ class CountryViewModel @Inject constructor(
 
     fun selectFilter(filter: String) {
         _filterList.value.add(filter)
+        if(getContinents().contains(filter)){
+            _noContinent.value = false
+        }
+        if(getTimeZones().contains(filter)){
+            _noContinent.value = false
+        }
     }
 
     fun unselectFilter(filter: String) {
@@ -108,19 +121,38 @@ class CountryViewModel @Inject constructor(
     fun getFilteredList(): List<CountryInfo> {
         val filters = _filterList.value.distinct()
         val countries = _searchState.value.countries
-        countries.forEach { country ->
-            if (
-                country.continent.any { continent ->
-                    filters.any {
-                        continent == it
-                    }
-                } && country.timezone.any { timeZone ->
-                    filters.any {
-                        timeZone == it
-                    }
+
+        if (!getContinents().any { continent ->
+                filters.any {
+                    it == continent
                 }
-            ) {
-                _countriesInFilter.value.add(country)
+            }) {
+            _noContinent.value = true
+        }
+
+        if (!getTimeZones().any { timeZone ->
+                filters.any {
+                    it == timeZone
+                }
+            }) {
+            _noTimeZone.value = true
+        }
+
+        if (!(_noContinent.value && _noTimeZone.value)) {
+            countries.forEach { country ->
+                if (
+                    country.continent.any { continent ->
+                        filters.any {
+                            continent == it
+                        }
+                    } && country.timezone.any { timeZone ->
+                        filters.any {
+                            timeZone == it
+                        }
+                    }
+                ) {
+                    _countriesInFilter.value.add(country)
+                }
             }
         }
         return _countriesInFilter.value.distinct().sortedBy { it.name }
@@ -137,5 +169,7 @@ class CountryViewModel @Inject constructor(
 
     fun clearFilters() {
         _filterList.value = mutableListOf()
+        _noContinent.value = false
+        _noTimeZone.value = false
     }
 }

@@ -31,7 +31,10 @@ fun MainLayout(
     getFilteredList: () -> List<CountryInfo>,
     getSearchedList: (String) -> List<CountryInfo>,
     selectedFilters: () -> List<String>,
-    onReset: () -> Unit
+    onReset: () -> Unit,
+    noTimezone: Boolean,
+    noContinent: Boolean,
+    errorMessage: String
 ) {
     val scope = rememberCoroutineScope()
     var currentBottomSheet: BottomSheetScreen? by remember {
@@ -105,9 +108,7 @@ fun MainLayout(
                     },
                     onFilterChange = {
                         openSheet(
-                            BottomSheetScreen.FiltersScreen(
-
-                            )
+                            BottomSheetScreen.FiltersScreen()
                         )
                     }
                 )
@@ -117,6 +118,11 @@ fun MainLayout(
             Surface(
                 modifier = Modifier.fillMaxSize()
             ) {
+
+                if(errorMessage.isNotBlank()){
+                    Text(text = errorMessage)
+                }
+
                 val scrollState = rememberLazyListState()
                 LazyColumn(
                     modifier = Modifier
@@ -127,6 +133,9 @@ fun MainLayout(
                 ) {
                     when (currentListMode) {
                         is ListMode.Filters -> {
+                            if(noTimezone || noContinent){
+                                item{Text(text = "Select values for both continent and timezone")}
+                            }
                             currentCountries = getFilteredList()
 
                             Log.d("ListMode", "Filter")

@@ -91,7 +91,7 @@ fun FiltersScreen(
             onRevealTimeZones()
         }
         if (isTimeZoneClicked) {
-            LazyColumn(modifier = Modifier.height(300.dp)) {
+            LazyColumn(modifier = Modifier.height(500.dp)) {
                 item { Spacer(modifier = Modifier.height(16.dp)) }
                 items(getTimeZones()) { timeZone ->
                     Row(

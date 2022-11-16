@@ -29,7 +29,6 @@ fun SheetLayout(
                 onFilterUnselected = { onFilterUnselected(it) },
                 onFilterValueSelected = { onFilterValueSelected(it) },
                 onReset = {
-                    closeSheet()
                     onReset(it)
                           },
                 selectedFilters = selectedFilters

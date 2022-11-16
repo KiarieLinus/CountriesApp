@@ -21,6 +21,7 @@ fun SearchCountryScreen(
     val countries = state.countries
     val selectedLanguage = viewModel.selectedLanguage.value
 
+    val errorMessage = state.error
 
 
     Surface(
@@ -50,7 +51,10 @@ fun SearchCountryScreen(
             selectedFilters = {viewModel.getSelectedFilters()},
             onReset = {
                 viewModel.clearFilters()
-            }
+            },
+            noTimezone = viewModel.noTimeZone.value,
+            noContinent =  viewModel.noContinent.value,
+            errorMessage = errorMessage
         )
     }
 }

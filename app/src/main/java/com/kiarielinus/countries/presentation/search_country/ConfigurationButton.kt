@@ -25,11 +25,7 @@ fun ConfigButton(
 ) {
     Button(
         onClick = { onClick() },
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
-//        colors = ButtonDefaults.buttonColors(
-//            backgroundColor = Color(0xFFFFFFFF),
-//            contentColor = Color(0xFF000000),
-//        )
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
     ) {
         Icon(imageVector = imgVector, contentDescription = "Configuration Button Image")
         Spacer(modifier = Modifier.width(8.dp))
